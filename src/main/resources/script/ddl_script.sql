@@ -1,26 +1,29 @@
-CREATE TABLE airports (
+CREATE DATABASE bitrock_airways;
+
+CREATE TABLE airport (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name" varchar NOT NULL,
-    active bool NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    international_code VARCHAR(3) NOT NULL,
+    active BOOLEAN NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT airports_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE customers (
+CREATE TABLE customer (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "name" varchar NOT NULL,
-    surname varchar NOT NULL,
-    gender varchar NOT NULL,
-    birthday date NOT NULL,
-    handicap bit(1) NOT NULL,
-    passport_number varchar NULL,
-    id_number varchar NULL,
-    active bool NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    birthday DATE NOT NULL,
+    handicap BOOLEAN NOT NULL,
+    passport_number VARCHAR NULL,
+    id_number VARCHAR NULL,
+    active BOOLEAN NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT clients_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE roles (
+CREATE TABLE role (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     "name" varchar NOT NULL,
     active bool NOT NULL,
@@ -28,7 +31,7 @@ CREATE TABLE roles (
     CONSTRAINT roles_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE vaccinations (
+CREATE TABLE vaccination (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     "name" varchar NOT NULL,
     active bool NOT NULL,
@@ -36,33 +39,33 @@ CREATE TABLE vaccinations (
     CONSTRAINT vaccinations_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE sites (
+CREATE TABLE site (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     "name" varchar NOT NULL,
-    address varchar NULL,
+    street varchar NOT NULL,
+    city varchar NOT NULL,
+    county varchar NOT NULL,
+    nation varchar NOT NULL,
+    is_headquarter BOOLEAN NOT NULL,
     company_id int NOT NULL,
     active bool NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT site_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE companies (
+CREATE TABLE company (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     "name" varchar NOT NULL,
     "share" money NOT NULL,
-    headquarters_id int NOT NULL,
     active bool NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT company_pk PRIMARY KEY (id),
-    CONSTRAINT company_fk FOREIGN KEY (headquarters_id) REFERENCES sites(id)
 );
 
-ALTER TABLE sites ADD CONSTRAINT site_fk FOREIGN KEY (company_id) REFERENCES companies(id);
-
-CREATE TABLE routes (
+CREATE TABLE route (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
-    from_airport_id int NOT NULL,
-    to_airport_id int NOT NULL,
+    departure_airport_id int NOT NULL,
+    arrival_airport_id int NOT NULL,
     active bool NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT routes_pk PRIMARY KEY (id),
@@ -70,7 +73,7 @@ CREATE TABLE routes (
     CONSTRAINT routes_to_fk FOREIGN KEY (to_airport_id) REFERENCES airports(id)
 );
 
-CREATE TABLE customers_vaccinations (
+CREATE TABLE customers_vaccination (
     customer_id int NOT NULL,
     vaccination_id int NOT NULL,
     active bool NOT NULL,
@@ -79,7 +82,7 @@ CREATE TABLE customers_vaccinations (
     CONSTRAINT customers_vaccinations_fk_1 FOREIGN KEY (vaccination_id) REFERENCES vaccinations(id)
 );
 
-CREATE TABLE employees (
+CREATE TABLE employee (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     "name" varchar NOT NULL,
     surname varchar NOT NULL,
@@ -112,36 +115,27 @@ CREATE TABLE flights (
     CONSTRAINT flights_fk FOREIGN KEY (route_id) REFERENCES routes(id)
 );
 
-CREATE TABLE flights_employees (
-    flight_id int NOT NULL,
-    employee_id int NOT NULL,
-    active bool NOT NULL,
-    date_inactivated timestamptz NULL,
-    CONSTRAINT flights_employees_fk FOREIGN KEY (flight_id) REFERENCES flights(id),
-    CONSTRAINT flights_employees_fk_1 FOREIGN KEY (employee_id) REFERENCES employees(id)
-);
-
-CREATE TABLE planes (
+CREATE TABLE plane (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     model varchar NOT NULL,
     seats_number int NOT NULL,
-    company_id int NOT NULL,
     active bool NOT NULL,
     date_inactivated timestamptz NULL,
     CONSTRAINT planes_pk PRIMARY KEY (id),
-    CONSTRAINT planes_fk FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
 CREATE TABLE routes_constraint (
+ id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     route_id int NOT NULL,
     plane_id int NOT NULL,
     active bool NOT NULL,
     date_inactivated timestamptz NULL,
+    CONSTRAINT routes_constraint_pk PRIMARY KEY (id),
     CONSTRAINT routes_constraint_fk FOREIGN KEY (route_id) REFERENCES routes(id),
     CONSTRAINT routes_constraint_fk_1 FOREIGN KEY (plane_id) REFERENCES planes(id)
 );
 
-CREATE TABLE tickets (
+CREATE TABLE ticket (
     id int NOT NULL GENERATED ALWAYS AS IDENTITY,
     customer_id int NOT NULL,
     flight_id int NOT NULL,
