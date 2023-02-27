@@ -119,7 +119,7 @@ CREATE TABLE flight (
                         arrival_time timestamptz NOT NULL,
                         active BOOLEAN NOT NULL,
                         date_inactivated timestamptz NULL,
-                        CONSTRAINT flight PRIMARY KEY (id),
+                        CONSTRAINT flight_pk PRIMARY KEY (id),
                         CONSTRAINT flight_fk FOREIGN KEY (route_id) REFERENCES route(id)
 );
 
