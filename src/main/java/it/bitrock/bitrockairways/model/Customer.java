@@ -53,6 +53,7 @@ public class Customer {
     @Column(name = "id_number", length=15)
     private String idNumber;
 
+    @Builder.Default
     @Column(name = "active", nullable=false)
     private Boolean active = true;
 
