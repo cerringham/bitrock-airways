@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder(setterPrefix = "with")
@@ -31,9 +31,10 @@ public class Company {
     @Column(name = "share", nullable=false)
     private Double share;
 
+    @Builder.Default
     @Column(name = "active", nullable=false)
     private Boolean active = true;
 
     @Column(name = "date_inactivated")
-    private LocalDateTime dateInactivated;
+    private ZonedDateTime dateInactivated;
 }

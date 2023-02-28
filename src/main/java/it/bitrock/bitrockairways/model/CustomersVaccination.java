@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder(setterPrefix = "with")
@@ -27,11 +27,12 @@ public class CustomersVaccination {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Builder.Default
     @Column(name = "active", nullable=false)
     private Boolean active = true;
 
     @Column(name = "date_inactivated")
-    private LocalDateTime dateInactivated;
+    private ZonedDateTime dateInactivated;
 
     @ManyToOne
     @JoinColumn(name="customer_id", nullable=false)

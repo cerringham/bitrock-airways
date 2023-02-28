@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder(setterPrefix = "with")
@@ -43,11 +43,12 @@ public class Employee {
     @Column(name = "hiring_date", nullable=false)
     private LocalDate hiringDate;
 
+    @Builder.Default
     @Column(name = "active", nullable=false)
     private Boolean active = true;
 
     @Column(name = "date_inactivated")
-    private LocalDateTime dateInactivated;
+    private ZonedDateTime dateInactivated;
 
     @ManyToOne
     @JoinColumn(name="site_id", nullable=false)

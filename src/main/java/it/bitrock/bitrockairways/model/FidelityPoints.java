@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder(setterPrefix = "with")
@@ -30,11 +30,12 @@ public class FidelityPoints {
     @Column(name = "points", nullable=false)
     private Integer points;
 
+    @Builder.Default
     @Column(name = "active", nullable=false)
     private Boolean active = true;
 
     @Column(name = "date_inactivated")
-    private LocalDateTime dateInactivated;
+    private ZonedDateTime dateInactivated;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
