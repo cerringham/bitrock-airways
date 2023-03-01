@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "departure_airport_id")

@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, length = 50)
     private String model;
