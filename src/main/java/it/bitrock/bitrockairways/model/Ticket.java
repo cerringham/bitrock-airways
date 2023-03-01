@@ -13,7 +13,8 @@ import java.time.ZonedDateTime;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ticket")
+@Entity
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

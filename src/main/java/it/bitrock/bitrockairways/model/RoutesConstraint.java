@@ -12,7 +12,8 @@ import java.time.ZonedDateTime;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "routes_constraint")
+@Entity
+@Table(name = "routes_constraint")
 public class RoutesConstraint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

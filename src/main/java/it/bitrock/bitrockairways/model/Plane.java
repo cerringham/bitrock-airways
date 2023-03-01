@@ -12,7 +12,8 @@ import java.time.ZonedDateTime;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "plane")
+@Entity
+@Table(name = "plane")
 public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
