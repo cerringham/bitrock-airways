@@ -1,6 +1,7 @@
 package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.model.Airport;
+import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.repository.TicketRepository;
 import it.bitrock.bitrockairways.service.TicketService;
@@ -27,5 +28,13 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> getAllTicketsByArrivalAirport(Airport arrivalAirport) {
         return ticketRepository.getTicketsByFlight_Route(arrivalAirport);
+    }
+
+    @Override
+    public List<Ticket> getTicketsByCustomerBeforeNow(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("customer cannot be null");
+        }
+        return ticketRepository.getTicketsByCustomerBeforeNow(customer);
     }
 }
