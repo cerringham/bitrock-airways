@@ -33,6 +33,9 @@ public class Ticket {
     @Column(nullable = false, length = 10)
     private String seatNumber;
 
+    @Column(nullable = false)
+    private ZonedDateTime dateBought;
+
     private BigDecimal price;
 
     private Boolean promotion;
