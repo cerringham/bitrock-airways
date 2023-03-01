@@ -1,5 +1,6 @@
 package it.bitrock.bitrockairways.service.impl;
 
+import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.service.CustomerService;
@@ -7,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,6 +18,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    @Override
+    public Customer getById(long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new CustomerNotFoundException(id);
+        }
+        return customer.get();
     }
 
     @Override

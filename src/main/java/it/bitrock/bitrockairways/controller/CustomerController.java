@@ -1,7 +1,9 @@
 package it.bitrock.bitrockairways.controller;
 
 import it.bitrock.bitrockairways.model.Customer;
+import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.service.CustomerService;
+import it.bitrock.bitrockairways.service.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +18,11 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
+    private final TicketService ticketService;
+
+    public CustomerController(CustomerService customerService, TicketService ticketService) {
         this.customerService = customerService;
+        this.ticketService = ticketService;
     }
 
 
@@ -39,4 +44,10 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    @GetMapping("/customers/{id}/tickets")
+    public ResponseEntity<List<Ticket>> getTicketsByCustomerBeforeNow(@PathVariable long id) {
+        Customer customer = customerService.getById(id);
+        List<Ticket> tickets = ticketService.getTicketsByCustomerBeforeNow(customer);
+        return ResponseEntity.ok(tickets);
+    }
 }

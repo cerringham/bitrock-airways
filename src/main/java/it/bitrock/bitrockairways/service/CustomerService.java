@@ -5,6 +5,7 @@ import it.bitrock.bitrockairways.model.Customer;
 import java.util.List;
 
 public interface CustomerService {
+    Customer getById(long id);
 
     List<Customer> getAllCustomers();
 
