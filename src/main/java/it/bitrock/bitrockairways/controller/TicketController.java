@@ -3,12 +3,10 @@ package it.bitrock.bitrockairways.controller;
 import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
+import it.bitrock.bitrockairways.model.dto.TicketCreateDTO;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +30,10 @@ public class TicketController {
             tickets = ticketService.getAllTicketsByArrivalAirport(airport);
         }
         return ResponseEntity.ok(tickets);
+    }
+
+    @PutMapping("/tickets")
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreateDTO ticketCreateDTO) {
+        return ResponseEntity.ok(null);
     }
 }
