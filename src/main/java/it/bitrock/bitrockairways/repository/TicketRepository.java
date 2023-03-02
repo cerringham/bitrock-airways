@@ -17,4 +17,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query
     List<Ticket> getTicketsByFlight_Route(Airport airport);
 
+    @Query("select t from ticket t WHERE t.flight.id = :flightId")
+    List<Ticket> getTicketsByFlightId(Integer flightId);
+
 }
