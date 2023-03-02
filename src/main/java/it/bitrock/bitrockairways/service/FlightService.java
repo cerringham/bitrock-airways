@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightService {
@@ -40,12 +42,16 @@ public class FlightService {
         } else {
             Long idDepartureAirport = airportRepository.findIdByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
             Long idArrivalAirport = airportRepository.findIdByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
-
+            ZonedDateTime dateOfRequest = ZonedDateTime.now();
             Route route = routeRepository.findByDepartureAndArrivalAirportId(idDepartureAirport, idArrivalAirport);
+
             if (route == null) {
                 throw new NoRecordException("No route corresponding to the given airports");
             }
-            return flightRepository.findByRouteId(route.getId());
+            List<Flight> list = flightRepository.findByRouteId(route.getId()).stream().filter(i->i.getDepartTime().isAfter(dateOfRequest))
+                    .collect(Collectors.toList());
+            //return flightRepository.findByRouteId(route.getId());
+            return list;
         }
     }
 }
