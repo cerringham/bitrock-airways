@@ -13,11 +13,12 @@ import java.time.ZonedDateTime;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ticket")
+@Entity
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
@@ -32,6 +33,9 @@ public class Ticket {
 
     @Column(nullable = false, length = 10)
     private String seatNumber;
+
+    @Column(nullable = false)
+    private ZonedDateTime dateBought;
 
     private BigDecimal price;
 

@@ -15,4 +15,6 @@ public interface TicketService {
 
     List<Ticket> getAllTicketsByArrivalAirport(Airport arrivalAirport);
 
+    List<Ticket> getTicketsByCustomerBeforeNow(Customer customer);
+
 }

@@ -35,4 +35,12 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> getAllTicketsByArrivalAirport(Airport arrivalAirport) {
         return ticketRepository.getTicketsByFlight_Route(arrivalAirport);
     }
+
+    @Override
+    public List<Ticket> getTicketsByCustomerBeforeNow(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("customer cannot be null");
+        }
+        return ticketRepository.getTicketsByCustomerBeforeNow(customer);
+    }
 }

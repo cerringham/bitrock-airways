@@ -1,6 +1,6 @@
 package it.bitrock.bitrockairways.service;
 
-import it.bitrock.bitrockairways.exceptions.NoRecordException;
+import it.bitrock.bitrockairways.exception.NoRecordException;
 import it.bitrock.bitrockairways.model.Employee;
 import it.bitrock.bitrockairways.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;

@@ -1,4 +1,4 @@
-package it.bitrock.bitrockairways.exceptions;
+package it.bitrock.bitrockairways.exception;
 
 public class NoRecordException extends Exception {
     public NoRecordException(String message){
