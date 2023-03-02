@@ -11,8 +11,8 @@ import java.util.List;
 public interface RouteRepository extends JpaRepository<Route, Long> {
 
     //@Query("FROM Flight f JOIN f.route route WHERE route.departureAirport.id = ?1 AND route.arrivalAirport.id = ?2")
-    @Query("FROM Flight f JOIN f.route route WHERE route.departureAirport.id = ?1 AND route.arrivalAirport.id = ?2")
-    public Route findByDepartureAndArrivalAirportByAirportId (Long departureAirportId, Long arrivalAirportId);
+    @Query("select r from Route r WHERE r.departureAirport.id = ?1 AND r.arrivalAirport.id = ?2")
+    Route findByDepartureAndArrivalAirportId (Long departureAirportId, Long arrivalAirportId);
 
     //public boolean existByDepartureAndArrivalId(Long departureId, Long arrivalId);
 }

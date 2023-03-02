@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    @Query("FROM Flight f WHERE f.route_id = ?1")
-    public Flight findByRouteId(Long id);
+    @Query("Select f FROM Flight f WHERE f.route.id = ?1")
+    List<Flight> findByRouteId(Long id);
 
 }

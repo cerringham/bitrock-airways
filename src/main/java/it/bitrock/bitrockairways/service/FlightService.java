@@ -26,17 +26,18 @@ public class FlightService {
     @Autowired
     FlightRepository flightRepository;
 
-    public List<Flight> listOfFlights(CustomerFlightSearchDTO dto) {
-        List<Flight> flightList = new ArrayList<>();
+    public List<Flight> getFutureFlightsByRoute(CustomerFlightSearchDTO dto) throws Exception {
+        if (!customerRepository.existsById(dto.getId())) {
+            throw new Exception("Customer doesn't exist!");
+        }
+
         Long idDepartureAirport = airportRepository.findIdByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
         Long idArrivalAirport = airportRepository.findIdByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
-        Route listOfRoutes = routeRepository.findByDepartureAndArrivalAirportByAirportId(idDepartureAirport, idArrivalAirport);
-
-        if (customerRepository.existsById(dto.getId()) && listOfRoutes != null) {
-                Flight f = flightRepository.findByRouteId(r.getId());
-                flightList.add(f);
-            return flightList;
+        Route route = routeRepository.findByDepartureAndArrivalAirportId(idDepartureAirport, idArrivalAirport);
+        if (route == null) {
+            throw new Exception("No route corresponding to the given airports");
         }
-        return null;
+
+        return flightRepository.findByRouteId(route.getId());
     }
 }
