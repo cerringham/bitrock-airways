@@ -1,6 +1,6 @@
-package it.bitrock.bitrockairways.errors;
+package it.bitrock.bitrockairways.error;
 
-import it.bitrock.bitrockairways.exceptions.NoRecordException;
+import it.bitrock.bitrockairways.exception.NoRecordException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

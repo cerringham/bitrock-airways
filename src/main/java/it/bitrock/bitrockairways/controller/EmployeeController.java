@@ -1,7 +1,7 @@
 package it.bitrock.bitrockairways.controller;
 
 
-import it.bitrock.bitrockairways.exceptions.NoRecordException;
+import it.bitrock.bitrockairways.exception.NoRecordException;
 import it.bitrock.bitrockairways.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
