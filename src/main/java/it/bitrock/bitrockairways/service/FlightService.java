@@ -51,7 +51,10 @@ public class FlightService {
             List<Flight> list = flightRepository.findByRouteId(route.getId()).stream().filter(i->i.getDepartTime().isAfter(dateOfRequest))
                     .collect(Collectors.toList());
             //return flightRepository.findByRouteId(route.getId());
-            return list;
+            if(!list.isEmpty()) {
+                return list;
+            }
+            throw new NoRecordException("No scheduled flighs starting from " + dateOfRequest);
         }
     }
 }
