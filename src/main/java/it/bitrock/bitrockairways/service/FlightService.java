@@ -30,15 +30,13 @@ public class FlightService {
         List<Flight> flightList = new ArrayList<>();
         Long idDepartureAirport = airportRepository.findIdByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
         Long idArrivalAirport = airportRepository.findIdByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
-        if (customerRepository.existsById(dto.getId()) && routeRepository.existByDepartureAndArrivalId(idDepartureAirport, idArrivalAirport)) {
-            List<Route> listOfRoutes = routeRepository.findByDepartureAndArrivalAirportByAirportId(idDepartureAirport, idDepartureAirport);
-            for(Route r : listOfRoutes){
+        Route listOfRoutes = routeRepository.findByDepartureAndArrivalAirportByAirportId(idDepartureAirport, idArrivalAirport);
+
+        if (customerRepository.existsById(dto.getId()) && listOfRoutes != null) {
                 Flight f = flightRepository.findByRouteId(r.getId());
                 flightList.add(f);
-            }
             return flightList;
         }
         return null;
     }
-
 }
