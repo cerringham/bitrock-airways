@@ -23,6 +23,9 @@ public class Plane {
     private String model;
 
     @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false)
     private Integer seatsCount;
 
     @Builder.Default
