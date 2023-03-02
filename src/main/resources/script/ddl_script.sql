@@ -151,6 +151,7 @@ CREATE TABLE ticket (
                         flight_id INT NOT NULL,
                         reservation_code VARCHAR(15) NOT NULL,
                         seat_number VARCHAR(10) NOT NULL,
+                        date_bought timestamptz NOT NULL,
                         price money NULL,
                         promotion BOOLEAN NULL,
                         active BOOLEAN NOT NULL,

@@ -109,8 +109,8 @@ VALUES
 (5, 1, '2023-03-17 14:15:00-00','2023-03-17 19:25:00-00', TRUE, NULL),
 (8, 1, '2023-03-18 17:50:00-00','2023-03-18 21:50:00-00', TRUE, NULL);
 
-INSERT INTO ticket(customer_id, flight_id,reservation_code,seat_number,price, promotion, active, date_inactivated)
+INSERT INTO ticket(customer_id, flight_id, reservation_code, seat_number, date_bought, price, promotion, active, date_inactivated)
 VALUES
-(1,1,'AX45D5','34F', 160, FALSE,TRUE,NULL),
-(1,1,'YU7JD9','2A', 100, FALSE,TRUE,NULL),
-(1,1,'GH457H','15D', 85, TRUE,TRUE,NULL);
+(1,1,'AX45D5','34F', '2023-01-15 19:10:00-00', 160, FALSE,TRUE,NULL),
+(1,1,'YU7JD9','2A', '2023-02-10 11:10:00-00', 100, FALSE,TRUE,NULL),
+(1,1,'GH457H','15D', '2023-02-02 08:45:00-00', 85, TRUE,TRUE,NULL);

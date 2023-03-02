@@ -17,4 +17,6 @@ public interface TicketService {
 
     String getFlightRandomAvailableSeat(String planeType, Integer flightId) throws Exception;
 
+    List<Ticket> getTicketsByCustomerBeforeNow(Customer customer);
+
 }

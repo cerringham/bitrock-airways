@@ -47,4 +47,12 @@ public class TicketServiceImpl implements TicketService {
 
         return new FlightUtility(planeType).getRandomAvailableSeat(occupiedSeats);
     }
+
+    @Override
+    public List<Ticket> getTicketsByCustomerBeforeNow(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("customer cannot be null");
+        }
+        return ticketRepository.getTicketsByCustomerBeforeNow(customer);
+    }
 }

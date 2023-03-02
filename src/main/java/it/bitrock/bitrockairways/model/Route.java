@@ -12,11 +12,12 @@ import java.time.ZonedDateTime;
 @Builder(setterPrefix = "with")
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "route")
+@Entity
+@Table(name = "route")
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "departure_airport_id")
