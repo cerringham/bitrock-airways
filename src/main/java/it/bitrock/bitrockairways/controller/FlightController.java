@@ -1,23 +1,24 @@
 package it.bitrock.bitrockairways.controller;
 
+import it.bitrock.bitrockairways.dto.CustomerFlightSearchDTO;
 import it.bitrock.bitrockairways.exception.NoRecordException;
+import it.bitrock.bitrockairways.service.FlightService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+
 
 @RestController
 @RequestMapping("/flight")
 public class FlightController {
 
-    @GetMapping("list_of_flights/{from}/{to}")
-    public ResponseEntity getFlightsByDate(
-            @PathVariable("from")LocalDate from, @PathVariable("to") LocalDate to) throws NoRecordException {
+    @Autowired
+    FlightService flightService;
 
-        return null;
+    @GetMapping("/list_of_routes")
+    public ResponseEntity getRoutes(@RequestBody CustomerFlightSearchDTO dto) throws Exception {
+        return ResponseEntity.ok(flightService.getFutureFlightsByRoute(dto));
     }
 
 }
