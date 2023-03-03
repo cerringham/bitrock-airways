@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "plane")
 public class Plane {
-    @Null
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

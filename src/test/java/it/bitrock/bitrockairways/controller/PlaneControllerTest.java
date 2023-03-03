@@ -6,6 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import it.bitrock.bitrockairways.exception.InvalidPlaneQuantityException;
 import it.bitrock.bitrockairways.exception.PlaneAlreadyExistsException;
 import it.bitrock.bitrockairways.model.Plane;
+import it.bitrock.bitrockairways.model.dto.PlaneCreateDTO;
+import it.bitrock.bitrockairways.model.dto.PlaneUpdateDTO;
 import it.bitrock.bitrockairways.model.validation.group.OnUpdate;
 import it.bitrock.bitrockairways.service.PlaneService;
 import jakarta.validation.*;
@@ -51,20 +53,19 @@ class PlaneControllerTest {
         Plane.PlaneBuilder planeBuilder = Plane.builder()
                 .withModel(PLANE_MODEL)
                 .withQuantity(1)
-                .withSeatsCount(300)
-                .withActive(null);
+                .withSeatsCount(300);
         Plane planeInput = planeBuilder.build();
         Plane planeOutput = planeBuilder
                 .withId(10L)
-                .withActive(true)
                 .build();
+        PlaneCreateDTO planeCreateDTO = new PlaneCreateDTO(PLANE_MODEL, 1, 300);
         when(planeService.create(planeInput)).thenReturn(planeOutput);
 
         // test
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeCreateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isCreated())
                 .andExpect(content().json(om.writeValueAsString(planeOutput)));
@@ -82,15 +83,15 @@ class PlaneControllerTest {
                 .withModel(PLANE_MODEL)
                 .withQuantity(1)
                 .withSeatsCount(300)
-                .withActive(null)
                 .build();
+        PlaneCreateDTO planeCreateDTO = new PlaneCreateDTO(PLANE_MODEL, 1, 300);
         when(planeService.create(planeInput)).thenThrow(new PlaneAlreadyExistsException(PLANE_MODEL));
 
         // test
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeCreateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest());
 
@@ -104,19 +105,17 @@ class PlaneControllerTest {
         // setup
         final String PLANE_MODEL = "Boeing 737";
         Plane planeInput = Plane.builder()
-                .withId(10L)
                 .withModel(PLANE_MODEL)
                 .withQuantity(1)
                 .withSeatsCount(100)
-                .withActive(null)
                 .build();
+        PlaneCreateDTO planeCreateDTO = new PlaneCreateDTO(PLANE_MODEL, 1, 100);
         Set<ConstraintViolation<Plane>> violations;
         try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = validatorFactory.getValidator();
             violations = validator.validate(planeInput);
         }
         Map<Object, Object> expectedViolations = Map.of(
-                "id", List.of("must be null"),
                 "seatsCount", List.of("cannot be less than 200")
         );
         when(planeService.create(planeInput)).thenThrow(new ConstraintViolationException("Plane not valid", violations));
@@ -125,7 +124,7 @@ class PlaneControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeCreateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(om.writeValueAsString(expectedViolations)));
@@ -139,9 +138,7 @@ class PlaneControllerTest {
     void updatePlaneShouldReturnUpdatedPlane() throws Exception {
         // setup
         final String PLANE_MODEL = "Boeing 737";
-        Plane.PlaneBuilder planeBuilder = Plane.builder()
-                .withModel(PLANE_MODEL)
-                .withActive(null);
+        Plane.PlaneBuilder planeBuilder = Plane.builder().withModel(PLANE_MODEL);
         Plane planeInput = planeBuilder
                 .withQuantity(5)
                 .build();
@@ -150,13 +147,14 @@ class PlaneControllerTest {
                 .withQuantity(5)
                 .withActive(true)
                 .build();
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, 5);
         when(planeService.update(planeInput)).thenReturn(planeOutput);
 
         // test
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeUpdateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(content().json(om.writeValueAsString(planeOutput)));
@@ -173,15 +171,15 @@ class PlaneControllerTest {
         Plane planeInput = Plane.builder()
                 .withModel(PLANE_MODEL)
                 .withQuantity(-1)
-                .withActive(null)
                 .build();
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, -1);
         when(planeService.update(planeInput)).thenThrow(new InvalidPlaneQuantityException("Plane quantity must be positive or zero"));
 
         // test
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeUpdateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().string("Plane quantity must be positive or zero"));
@@ -194,20 +192,19 @@ class PlaneControllerTest {
     @Test
     void updatePlaneShouldReturnBadRequestOnConstraintViolationException() throws Exception {
         // setup
-        final String PLANE_MODEL = "Boeing 737";
+        final String PLANE_MODEL = "INVALID a123";
         Plane planeInput = Plane.builder()
                 .withModel(PLANE_MODEL)
                 .withQuantity(4)
-                .withSeatsCount(100)
-                .withActive(null)
                 .build();
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, 4);
         Set<ConstraintViolation<Plane>> violations;
         try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = validatorFactory.getValidator();
             violations = validator.validate(planeInput, Default.class, OnUpdate.class);
         }
         Map<Object, Object> expectedViolations = Map.of(
-                "seatsCount", List.of("must be null", "cannot be less than 200")
+                "model", List.of("invalid format")
         );
 
         when(planeService.update(planeInput)).thenThrow(new ConstraintViolationException("Invalid plane", violations));
@@ -216,7 +213,7 @@ class PlaneControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(planeInput));
+                .content(om.writeValueAsString(planeUpdateDTO));
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(om.writeValueAsString(expectedViolations)));
