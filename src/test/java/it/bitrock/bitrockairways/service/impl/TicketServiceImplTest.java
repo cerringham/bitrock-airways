@@ -2,7 +2,9 @@ package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
+import it.bitrock.bitrockairways.repository.FidelityPointsRepository;
 import it.bitrock.bitrockairways.repository.TicketRepository;
+import it.bitrock.bitrockairways.service.CustomerService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,11 +22,15 @@ class TicketServiceImplTest {
     private TicketService ticketService;
 
     private TicketRepository ticketRepository;
+    private CustomerService customerService;
+    private FidelityPointsRepository fidelityPointsRepository;
 
     @BeforeEach
     void setUp() {
         ticketRepository = mock(TicketRepository.class);
-        ticketService = new TicketServiceImpl(ticketRepository);
+        customerService = mock(CustomerService.class);
+        fidelityPointsRepository = mock(FidelityPointsRepository.class);
+        ticketService = new TicketServiceImpl(ticketRepository, customerService, fidelityPointsRepository);
     }
 
     @Test
