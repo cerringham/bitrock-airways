@@ -31,30 +31,32 @@ public class FlightService {
     FlightRepository flightRepository;
 
     public List<Flight> getFutureFlightsByRoute(CustomerFlightSearchDTO dto) throws NoRecordException {
-        if (!customerRepository.existsById(dto.getId())) {
-            throw new NoRecordException("Customer with id " + dto.getId() + " doesn't exist!");
+        if (!customerRepository.existsById(dto.getCustomerId())) {
+            throw new NoRecordException("Customer with id " + dto.getCustomerId() + " doesn't exist!");
         }
-
-        if (airportRepository.findIdByInternationalCode(dto.getDepartureAirportInternationalCode()) == null) {
+        Long idDepartureAirport = airportRepository.findByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
+        Long idArrivalAirport = airportRepository.findByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
+        if (idDepartureAirport == null) {
             throw new NoRecordException("Airport " + dto.getDepartureAirportInternationalCode() + " is not included into the available routes");
-        } else if (airportRepository.findIdByInternationalCode(dto.getArrivalAirportInternationalCode()) == null) {
+        } else if (idArrivalAirport == null) {
             throw new NoRecordException("Airport " + dto.getArrivalAirportInternationalCode() + " is not included into the available routes");
         } else {
-            Long idDepartureAirport = airportRepository.findIdByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
-            Long idArrivalAirport = airportRepository.findIdByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
             ZonedDateTime dateOfRequest = ZonedDateTime.now();
             Route route = routeRepository.findByDepartureAndArrivalAirportId(idDepartureAirport, idArrivalAirport);
-
             if (route == null) {
                 throw new NoRecordException("No route corresponding to the given airports");
             }
-            List<Flight> list = flightRepository.findByRouteId(route.getId()).stream().filter(i->i.getDepartTime().isAfter(dateOfRequest))
-                    .collect(Collectors.toList());
+
+            List<Flight> allRouteFlights = flightRepository.findByRouteId(route.getId());
+            List<Flight> futureFlights = allRouteFlights.stream()
+                    .filter(i->i.getDepartTime().isAfter(dateOfRequest))
+                    .toList();
             //return flightRepository.findByRouteId(route.getId());
-            if(!list.isEmpty()) {
-                return list;
+            if(futureFlights.isEmpty()) {
+                throw new NoRecordException("No scheduled flights starting from " + dateOfRequest);
             }
-            throw new NoRecordException("No scheduled flighs starting from " + dateOfRequest);
+            return futureFlights;
+
         }
     }
 }

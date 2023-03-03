@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface AirportRepository extends JpaRepository<Airport, Long> {
 
     @Query("SELECT a FROM Airport a WHERE a.internationalCode = ?1")
-    public Airport findIdByInternationalCode(String internationalCode);
+    public Airport findByInternationalCode(String internationalCode);
 
 
 }
