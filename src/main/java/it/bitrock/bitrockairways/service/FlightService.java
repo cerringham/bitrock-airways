@@ -34,15 +34,15 @@ public class FlightService {
         if (!customerRepository.existsById(dto.getCustomerId())) {
             throw new NoRecordException("Customer with id " + dto.getCustomerId() + " doesn't exist!");
         }
-        Long idDepartureAirport = airportRepository.findByInternationalCode(dto.getDepartureAirportInternationalCode()).getId();
-        Long idArrivalAirport = airportRepository.findByInternationalCode(dto.getArrivalAirportInternationalCode()).getId();
-        if (idDepartureAirport == null) {
+        Airport departureAirport = airportRepository.findByInternationalCode(dto.getDepartureAirportInternationalCode());
+        Airport arrivalAirport = airportRepository.findByInternationalCode(dto.getArrivalAirportInternationalCode());
+        if (departureAirport == null) {
             throw new NoRecordException("Airport " + dto.getDepartureAirportInternationalCode() + " is not included into the available routes");
-        } else if (idArrivalAirport == null) {
+        } else if (arrivalAirport == null) {
             throw new NoRecordException("Airport " + dto.getArrivalAirportInternationalCode() + " is not included into the available routes");
         } else {
             ZonedDateTime dateOfRequest = ZonedDateTime.now();
-            Route route = routeRepository.findByDepartureAndArrivalAirportId(idDepartureAirport, idArrivalAirport);
+            Route route = routeRepository.findByDepartureAndArrivalAirportId(departureAirport.getId(), arrivalAirport.getId());
             if (route == null) {
                 throw new NoRecordException("No route corresponding to the given airports");
             }
