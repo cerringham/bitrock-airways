@@ -8,6 +8,7 @@ import it.bitrock.bitrockairways.service.CustomerService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -19,19 +20,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
 class TicketServiceImplTest {
-    private TicketService ticketService;
+    @Autowired
+    private TicketServiceImpl ticketService;
 
-    private TicketRepository ticketRepository;
-    private CustomerService customerService;
-    private FidelityPointsRepository fidelityPointsRepository;
-
-    @BeforeEach
-    void setUp() {
-        ticketRepository = mock(TicketRepository.class);
-        customerService = mock(CustomerService.class);
-        fidelityPointsRepository = mock(FidelityPointsRepository.class);
-        ticketService = new TicketServiceImpl(ticketRepository, customerService, fidelityPointsRepository);
-    }
 
     @Test
     void getTicketsByCustomerBeforeNowShouldReturnTickets() {
@@ -52,15 +43,15 @@ class TicketServiceImplTest {
             buildTicket(20L, customer, "789", "5H")
         );
 
-        when(ticketRepository.getTicketsByCustomerBeforeNow(customer)).thenReturn(tickets);
+        when(ticketService.getTicketsByCustomerBeforeNow(customer)).thenReturn(tickets);
 
         // test
         List<Ticket> ticketsRetrieved = ticketService.getTicketsByCustomerBeforeNow(customer);
 
         // validate
         assertThat(ticketsRetrieved).containsExactlyInAnyOrderElementsOf(tickets);
-        verify(ticketRepository).getTicketsByCustomerBeforeNow(customer);
-        verifyNoMoreInteractions(ticketRepository);
+        verify(ticketService).getTicketsByCustomerBeforeNow(customer);
+        verifyNoMoreInteractions(ticketService);
     }
 
     @Test
@@ -71,7 +62,7 @@ class TicketServiceImplTest {
                 .withMessage("customer cannot be null");
 
         // validate
-        verifyNoInteractions(ticketRepository);
+        verifyNoInteractions(ticketService);
     }
 
     private Ticket buildTicket(Long id, Customer customer, String reservationCode, String seatNumber) {
