@@ -3,10 +3,13 @@ package it.bitrock.bitrockairways.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import it.bitrock.bitrockairways.exception.InvalidPlaneQuantityException;
 import it.bitrock.bitrockairways.exception.PlaneAlreadyExistsException;
 import it.bitrock.bitrockairways.model.Plane;
+import it.bitrock.bitrockairways.model.validation.group.OnUpdate;
 import it.bitrock.bitrockairways.service.PlaneService;
 import jakarta.validation.*;
+import jakarta.validation.groups.Default;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +132,97 @@ class PlaneControllerTest {
 
         // validate
         verify(planeService).create(planeInput);
+        verifyNoMoreInteractions(planeService);
+    }
+
+    @Test
+    void updatePlaneShouldReturnUpdatedPlane() throws Exception {
+        // setup
+        final String PLANE_MODEL = "Boeing 737";
+        Plane.PlaneBuilder planeBuilder = Plane.builder()
+                .withModel(PLANE_MODEL)
+                .withActive(null);
+        Plane planeInput = planeBuilder
+                .withQuantity(5)
+                .build();
+        Plane planeOutput = planeBuilder
+                .withId(10L)
+                .withQuantity(5)
+                .withActive(true)
+                .build();
+        when(planeService.update(planeInput)).thenReturn(planeOutput);
+
+        // test
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(planeInput));
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().json(om.writeValueAsString(planeOutput)));
+
+        // validate
+        verify(planeService).update(planeInput);
+        verifyNoMoreInteractions(planeService);
+    }
+
+    @Test
+    void updatePlaneShouldReturnNotAcceptableOnInvalidPlaneQuantityException() throws Exception {
+        // setup
+        final String PLANE_MODEL = "Boeing 737";
+        Plane planeInput = Plane.builder()
+                .withModel(PLANE_MODEL)
+                .withQuantity(-1)
+                .withActive(null)
+                .build();
+        when(planeService.update(planeInput)).thenThrow(new InvalidPlaneQuantityException("Plane quantity must be positive or zero"));
+
+        // test
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(planeInput));
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Plane quantity must be positive or zero"));
+
+        // validate
+        verify(planeService).update(planeInput);
+        verifyNoMoreInteractions(planeService);
+    }
+
+    @Test
+    void updatePlaneShouldReturnBadRequestOnConstraintViolationException() throws Exception {
+        // setup
+        final String PLANE_MODEL = "Boeing 737";
+        Plane planeInput = Plane.builder()
+                .withModel(PLANE_MODEL)
+                .withQuantity(4)
+                .withSeatsCount(100)
+                .withActive(null)
+                .build();
+        Set<ConstraintViolation<Plane>> violations;
+        try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
+            Validator validator = validatorFactory.getValidator();
+            violations = validator.validate(planeInput, Default.class, OnUpdate.class);
+        }
+        Map<Object, Object> expectedViolations = Map.of(
+                "seatsCount", List.of("must be null", "cannot be less than 200")
+        );
+
+        when(planeService.update(planeInput)).thenThrow(new ConstraintViolationException("Invalid plane", violations));
+
+        // test
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/planes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(planeInput));
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(om.writeValueAsString(expectedViolations)));
+
+        // validate
+        verify(planeService).update(planeInput);
         verifyNoMoreInteractions(planeService);
     }
 }

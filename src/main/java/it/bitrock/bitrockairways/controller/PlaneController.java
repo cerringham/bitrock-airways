@@ -19,4 +19,10 @@ public class PlaneController {
     public Plane createPlane(@RequestBody Plane plane) {
         return planeService.create(plane);
     }
+
+    @PutMapping("/planes")
+    @ResponseStatus(HttpStatus.OK)
+    public Plane updatePlane(@RequestBody Plane plane) {
+        return planeService.update(plane);
+    }
 }
