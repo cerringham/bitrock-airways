@@ -97,13 +97,13 @@ VALUES
 (9, 1, TRUE, NULL),
 (10, 1, TRUE, NULL);
 
-INSERT INTO flight(route_id,depart_time,arrival_time,active,date_inactivated)
+INSERT INTO flight(route_id,plane_id,depart_time,arrival_time,active,date_inactivated)
 VALUES
-(1, '2023-02-28 19:10:00-00','2023-02-28 20:10:00-00', TRUE, NULL),
-(3, '2023-03-15 08:00:00-00','2023-03-15 10:50:00-00', TRUE, NULL),
-(7, '2023-03-16 12:45:00-00','2023-03-16 13:45:00-00', TRUE, NULL),
-(5, '2023-03-17 14:15:00-00','2023-03-17 19:25:00-00', TRUE, NULL),
-(8, '2023-03-18 17:50:00-00','2023-03-18 21:50:00-00', TRUE, NULL);
+(1, 1, '2023-02-28 19:10:00-00','2023-02-28 20:10:00-00', TRUE, NULL),
+(3, 1, '2023-03-15 08:00:00-00','2023-03-15 10:50:00-00', TRUE, NULL),
+(7, 1, '2023-03-16 12:45:00-00','2023-03-16 13:45:00-00', TRUE, NULL),
+(5, 1, '2023-03-17 14:15:00-00','2023-03-17 19:25:00-00', TRUE, NULL),
+(8, 1, '2023-03-18 17:50:00-00','2023-03-18 21:50:00-00', TRUE, NULL);
 
 INSERT INTO ticket(customer_id, flight_id, reservation_code, seat_number, date_bought, price, promotion, active, date_inactivated)
 VALUES

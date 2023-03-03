@@ -112,25 +112,26 @@ CREATE TABLE fidelity_points (
                                  CONSTRAINT fidelity_points_fk FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
 
+CREATE TABLE plane (
+                       id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+                       model VARCHAR(50) NOT NULL,
+                       seats_count INT NOT NULL,
+                       active BOOLEAN NOT NULL,
+                       date_inactivated timestamptz NULL,
+                       CONSTRAINT plane_pk PRIMARY KEY (id)
+);
+
 CREATE TABLE flight (
                         id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
                         route_id INT NOT NULL,
+                        plane_id INT NOT NULL,
                         depart_time timestamptz NOT NULL,
                         arrival_time timestamptz NOT NULL,
                         active BOOLEAN NOT NULL,
                         date_inactivated timestamptz NULL,
                         CONSTRAINT flight_pk PRIMARY KEY (id),
-                        CONSTRAINT flight_fk FOREIGN KEY (route_id) REFERENCES route(id)
-);
-
-CREATE TABLE plane (
-                       id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
-                       model VARCHAR(50) NOT NULL,
-                       quantity INT NOT NULL,
-                       seats_count INT NOT NULL,
-                       active BOOLEAN NOT NULL,
-                       date_inactivated timestamptz NULL,
-                       CONSTRAINT plane_pk PRIMARY KEY (id)
+                        CONSTRAINT flight_fk FOREIGN KEY (route_id) REFERENCES route(id),
+                        CONSTRAINT flight_fk_1 FOREIGN KEY (plane_id) REFERENCES plane(id)
 );
 
 CREATE TABLE routes_constraint (

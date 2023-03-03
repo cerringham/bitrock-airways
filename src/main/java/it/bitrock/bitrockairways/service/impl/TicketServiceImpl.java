@@ -2,6 +2,7 @@ package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Customer;
+import it.bitrock.bitrockairways.model.Flight;
 import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.repository.TicketRepository;
 import it.bitrock.bitrockairways.service.TicketService;
@@ -18,6 +19,11 @@ public class TicketServiceImpl implements TicketService {
 
     public TicketServiceImpl(TicketRepository ticketRepository){
         this.ticketRepository = ticketRepository;
+    }
+
+    @Override
+    public Ticket createTicket(Flight flight, Customer customer) {
+        return null;
     }
 
     @Override

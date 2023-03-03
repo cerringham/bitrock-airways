@@ -23,6 +23,10 @@ public class Flight {
     @JoinColumn(name = "route_id")
     private Route route;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "plane_id")
+    private Plane plane;
+
     @Column(nullable = false)
     private ZonedDateTime departTime;
 
