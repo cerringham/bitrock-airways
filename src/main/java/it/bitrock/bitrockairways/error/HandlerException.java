@@ -21,4 +21,10 @@ public class HandlerException {
     public void handleCustomerNotFoundException() {
         // method used to map the exception into a 404 status code
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIllegalArgumentException() {
+        // method used to map the exception into a 400 status code
+    }
 }
