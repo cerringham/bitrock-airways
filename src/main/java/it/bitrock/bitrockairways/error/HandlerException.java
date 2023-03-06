@@ -1,6 +1,7 @@
 package it.bitrock.bitrockairways.error;
 
 import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
+import it.bitrock.bitrockairways.exception.InvalidPlaneQuantityException;
 import it.bitrock.bitrockairways.exception.NoRecordException;
 import it.bitrock.bitrockairways.exception.PlaneAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
@@ -46,5 +47,11 @@ public class HandlerException {
             violations.add(violation.getMessage());
         });
         return response;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(InvalidPlaneQuantityException.class)
+    public String handleInvalidPlaneQuantityException(InvalidPlaneQuantityException e) {
+        return e.getMessage();
     }
 }
