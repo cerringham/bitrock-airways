@@ -147,7 +147,7 @@ class PlaneControllerTest {
                 .withQuantity(5)
                 .withActive(true)
                 .build();
-        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, 5);
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, true, 5);
         when(planeService.update(planeInput)).thenReturn(planeOutput);
 
         // test
@@ -172,7 +172,7 @@ class PlaneControllerTest {
                 .withModel(PLANE_MODEL)
                 .withQuantity(-1)
                 .build();
-        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, -1);
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, true, -1);
         when(planeService.update(planeInput)).thenThrow(new InvalidPlaneQuantityException("Plane quantity must be positive or zero"));
 
         // test
@@ -197,7 +197,7 @@ class PlaneControllerTest {
                 .withModel(PLANE_MODEL)
                 .withQuantity(4)
                 .build();
-        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, 4);
+        PlaneUpdateDTO planeUpdateDTO = new PlaneUpdateDTO(PLANE_MODEL, true, 4);
         Set<ConstraintViolation<Plane>> violations;
         try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = validatorFactory.getValidator();

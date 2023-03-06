@@ -379,7 +379,6 @@ class PlaneServiceImplTest {
                 .withId(10L)
                 .withModel("Boeing 737")
                 .withQuantity(1)
-                .withActive(null)
                 .build();
 
         // test
