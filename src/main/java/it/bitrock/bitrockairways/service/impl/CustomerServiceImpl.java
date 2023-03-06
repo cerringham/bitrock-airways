@@ -7,6 +7,7 @@ import it.bitrock.bitrockairways.service.CustomerService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomersByAge(int age) {
-        return customerRepository.getCustomersByAge(age);
+        LocalDate birthDate = LocalDate.now().minusYears(age);
+        return customerRepository.getCustomersWithBirthDateLessThanOrEqual(birthDate);
     }
 
     @Override
