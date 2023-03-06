@@ -36,7 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomersByAge(int age) {
-        return customerRepository.getCustomersByAge(age);
+       // return customerRepository.getCustomersByAge(age);
+        return null;
     }
 
     @Override
