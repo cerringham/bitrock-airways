@@ -9,7 +9,9 @@ import it.bitrock.bitrockairways.repository.AirportRepository;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.repository.FlightRepository;
 import it.bitrock.bitrockairways.repository.RouteRepository;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +21,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -41,19 +45,66 @@ public class FlightServiceTest {
     @Mock
     FlightRepository flightRepository;
 
+    //Rule to verify exceptions throwing
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
+
     @Test
     public void givenListOfRouteFlights_whenGet_OnlyFutureOnesAreReturned() throws NoRecordException {
         when(customerRepository.existsById(anyLong())).thenReturn(true);
-        when(airportRepository.findByInternationalCode(anyString())).thenReturn(generateDemoAirport(1L, "Milan", "MXP"));
+        when(airportRepository.findByInternationalCode(anyString())).thenReturn(Optional.ofNullable(generateDemoAirport(1L, "Milan", "MXP")));
         when(routeRepository.findByDepartureAndArrivalAirportId(anyLong(), anyLong()))
-                .thenReturn(generateDemoRoute(1L
+                .thenReturn(Optional.ofNullable(generateDemoRoute(1L
                         , generateDemoAirport(1L, "Milan", "MXP")
-                        , generateDemoAirport(2L, "New York", "NYC")));
+                        , generateDemoAirport(2L, "New York", "NYC"))));
         when(flightRepository.findByRouteId(anyLong())).thenReturn(generateFlightsList());
 
         List<Flight> futureFlights = flightService.getFutureFlightsByRoute(new CustomerFlightSearchDTO(1L, "MXP", "NYC"));
 
         assertEquals(1, futureFlights.size());
+    }
+
+    @Test
+    public void givenNonExistingCustomerId_whenGet_NoRecordExceptionIsThrown() throws NoRecordException {
+        when(customerRepository.existsById(anyLong())).thenReturn(false);
+
+        exceptionRule.expect(NoRecordException.class);
+        exceptionRule.expectMessage("Customer with id 1 doesn't exist!");
+        flightService.getFutureFlightsByRoute(new CustomerFlightSearchDTO(1L, "MXP", "NYC"));
+    }
+
+    @Test
+    public void givenNonExistingAirport_whenGet_NoRecordExceptionIsThrown() throws NoRecordException {
+        when(customerRepository.existsById(anyLong())).thenReturn(true);
+
+        exceptionRule.expect(NoRecordException.class);
+        exceptionRule.expectMessage("Airport MXP is not included into the available routes");
+        flightService.getFutureFlightsByRoute(new CustomerFlightSearchDTO(1L, "MXP", "NYC"));
+    }
+
+    @Test
+    public void givenNonExistingRoute_whenGet_NoRecordExceptionIsThrown() throws NoRecordException {
+        when(customerRepository.existsById(anyLong())).thenReturn(true);
+        when(airportRepository.findByInternationalCode(anyString())).thenReturn(Optional.ofNullable(generateDemoAirport(1L, "Milan", "MXP")));
+
+        exceptionRule.expect(NoRecordException.class);
+        exceptionRule.expectMessage("No route corresponding to the given airports");
+        flightService.getFutureFlightsByRoute(new CustomerFlightSearchDTO(1L, "MXP", "NYC"));
+    }
+
+    @Test
+    public void givenRouteWithNoFutureFlights_whenGet_NoRecordExceptionIsThrown() throws NoRecordException {
+        when(customerRepository.existsById(anyLong())).thenReturn(true);
+        when(airportRepository.findByInternationalCode(anyString())).thenReturn(Optional.ofNullable(generateDemoAirport(1L, "Milan", "MXP")));
+        when(routeRepository.findByDepartureAndArrivalAirportId(anyLong(), anyLong()))
+                .thenReturn(Optional.ofNullable(generateDemoRoute(1L
+                        , generateDemoAirport(1L, "Milan", "MXP")
+                        , generateDemoAirport(2L, "New York", "NYC"))));
+        when(flightRepository.findByRouteId(anyLong())).thenReturn(Collections.emptyList());
+
+        exceptionRule.expect(NoRecordException.class);
+        exceptionRule.expectMessage("No scheduled flights starting from ");
+        flightService.getFutureFlightsByRoute(new CustomerFlightSearchDTO(1L, "MXP", "NYC"));
     }
 
     Airport generateDemoAirport(Long id, String name, String internationalCode) {
