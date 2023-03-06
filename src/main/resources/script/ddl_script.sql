@@ -115,6 +115,7 @@ CREATE TABLE fidelity_points (
 CREATE TABLE plane (
                        id INT NOT NULL GENERATED ALWAYS AS IDENTITY,
                        model VARCHAR(50) NOT NULL,
+                       quantity INT NOT NULL,
                        seats_count INT NOT NULL,
                        active BOOLEAN NOT NULL,
                        date_inactivated timestamptz NULL,
