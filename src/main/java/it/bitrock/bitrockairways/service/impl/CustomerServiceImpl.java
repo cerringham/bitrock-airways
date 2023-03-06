@@ -2,6 +2,7 @@ package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
 import it.bitrock.bitrockairways.model.Customer;
+import it.bitrock.bitrockairways.model.FidelityPoints;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.service.CustomerService;
 import jakarta.transaction.Transactional;
@@ -44,5 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getAllCustomersInFidelityProgram() {
         return customerRepository.getCustomersInFidelityProgram();
+    }
+
+    @Override
+    public Optional<FidelityPoints> isCustomerInFidelityProgram(long customerID) {
+        return customerRepository.getCustomerFromFidelityProgram(customerID);
     }
 }
