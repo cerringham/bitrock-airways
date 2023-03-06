@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 public class PlaneUpdateDTO {
     private String model;
 
+    private boolean active;
+
     private Integer quantity;
 }

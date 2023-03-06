@@ -68,7 +68,11 @@ public class PlaneServiceImpl implements PlaneService {
         Supplier<NoRecordException> exceptionSupplier = () -> new NoRecordException(String.format("Plane with model \"%s\" does not exist", plane.getModel()));
         Plane updatedPlane = planeRepository.findByModel(plane.getModel()).map(retrievedPlane -> {
             if (Boolean.FALSE.equals(retrievedPlane.getActive())) {
-                throw exceptionSupplier.get();
+                if (Boolean.TRUE.equals(plane.getActive())) {
+                    retrievedPlane.setActive(true);
+                } else {
+                    throw exceptionSupplier.get();
+                }
             }
             if (plane.getQuantity() == 0) {
                 retrievedPlane.setActive(false);
