@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TicketRepository extends JpaRepository<Ticket, Integer> {
+public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query
     List<Ticket> getTicketsByFlight_RouteDepartureAirport(Airport airport);
