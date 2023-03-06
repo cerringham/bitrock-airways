@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TicketCreateDTO {
 
-    private long flightID;
-    private long clientID;
+    private Long flightID;
+    private Long clientID;
 
 }

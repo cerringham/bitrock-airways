@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +42,8 @@ public class TicketServiceImpl implements TicketService {
         boolean isFree = false;
         if (fp != null) {
             fp.setPoints(fp.getPoints() + 100);
-            if (fp.getPoints() >= 1500) {
-                fp.setPoints(fp.getPoints() - 1500);
+            if (fp.getPoints() == 1500) {
+                fp.setPoints(0);
                 isFree = true;
             }
         }
@@ -51,7 +52,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setFlight(flight);
         ticket.setPrice(BigDecimal.valueOf(isFree ? 0 : 100));
         ticket.setDateBought(ZonedDateTime.now());
-        ticket.setReservationCode("AX45D5");
+        ticket.setReservationCode(generateReservationCode(flight));
         try {
             ticket.setSeatNumber(ticketService.getFlightRandomAvailableSeat(flight.getPlane().getModel(), flight.getId()));
         } catch (Exception e) {
@@ -59,7 +60,7 @@ public class TicketServiceImpl implements TicketService {
         }
         ticket.setPromotion(isFree);
 
-        fidelityPointsRepository.updateFidelityPoints(fp);
+        fidelityPointsRepository.updateFidelityPoints(fp.getId(), fp.getPoints());
         ticketRepository.save(ticket);
         return ticket;
     }
@@ -90,5 +91,12 @@ public class TicketServiceImpl implements TicketService {
             throw new IllegalArgumentException("customer cannot be null");
         }
         return ticketRepository.getTicketsByCustomerBeforeNow(customer);
+    }
+
+    private String generateReservationCode(Flight flight) {
+        String res = flight.getRoute().getDepartureAirport().getName().substring(0, 1).concat(flight.getRoute().getArrivalAirport().getName().substring(0, 1));
+        SecureRandom random = new SecureRandom();
+        long longToken = Math.abs(random.nextLong());
+        return res.concat(Long.toString(longToken, 10).substring(0, 5));
     }
 }
