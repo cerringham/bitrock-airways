@@ -33,8 +33,8 @@ public class HandlerException {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(PlaneAlreadyExistsException.class)
-    public void handlePlaneAlreadyExistsException() {
+    @ExceptionHandler({ PlaneAlreadyExistsException.class, IllegalArgumentException.class })
+    public void handleBadRequests() {
         // method used to map the exception into a 400 status code
     }
 
