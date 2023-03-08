@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
@@ -15,4 +16,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     @Query("select f from Flight f where f.active and f.route.arrivalAirport = :airport")
     List<Flight> findArrivalsByAirport(Airport airport);
+
+    List<Flight> findByDepartTimeBetween(ZonedDateTime start, ZonedDateTime end);
+
+    List<Flight> findByArrivalTimeBetween(ZonedDateTime start, ZonedDateTime end);
 }

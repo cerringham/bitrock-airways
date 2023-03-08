@@ -28,4 +28,9 @@ public class AirportController {
         Airport airport = airportService.findById(id);
         return flightService.getTimeSlotWithMostTraffic(airport);
     }
+
+    @GetMapping("/airports/busiest-hub/{date}")
+    public Airport getBusiestAirportHub(@PathVariable String date) {
+        return flightService.getAirportWithMostTraffic(date);
+    }
 }

@@ -8,8 +8,7 @@ import it.bitrock.bitrockairways.repository.FlightRepository;
 import it.bitrock.bitrockairways.service.FlightService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -59,5 +58,40 @@ public class FlightServiceImpl implements FlightService {
                                 .filter(s -> s.getArriving() + s.getDeparting() == maximumTraffic)
                                 .toList())
                 .orElseGet(ArrayList::new);
+    }
+
+    @Override
+    public Airport getAirportWithMostTraffic(String date) {
+        ZonedDateTime start = ZonedDateTime.from(LocalDateTime.parse(date + "T00:00:00"));
+        ZonedDateTime end = start.plusMonths(1);
+
+        Map<Airport, Integer> airportDepartures = new HashMap<>();
+        Map<Airport, Integer> airportArrivals = new HashMap<>();
+
+        List<Flight> departingFlights = flightRepository.findByDepartTimeBetween(start, end);
+        List<Flight> arrivingFlights = flightRepository.findByArrivalTimeBetween(start, end);
+
+        for (Flight flight : departingFlights) {
+            Airport airport = flight.getRoute().getDepartureAirport();
+            airportDepartures.put(airport, airportDepartures.getOrDefault(airport, 0) + 1);
+        }
+
+        for (Flight flight : arrivingFlights) {
+            Airport airport = flight.getRoute().getArrivalAirport();
+            airportArrivals.put(airport, airportArrivals.getOrDefault(airport, 0) + 1);
+        }
+
+        int maxFlights = 0;
+        Airport hub = null;
+
+        for (Airport airport : airportDepartures.keySet()) {
+            int flights = airportDepartures.getOrDefault(airport, 0) + airportArrivals.getOrDefault(airport, 0);
+            if (flights > maxFlights) {
+                maxFlights = flights;
+                hub = airport;
+            }
+        }
+
+        return hub;
     }
 }
