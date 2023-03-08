@@ -49,13 +49,13 @@ public class FlightControllerTest {
         ZonedDateTime to = ZonedDateTime.of(2023, 7, 1, 9, 0, 0, 0, ZoneId.systemDefault());
         Flight firstFlight = Flight.builder()
                 .withId(1L)
-                .withPlane(new Plane(1L, "Boeing 737", 300, true, null))
+                .withPlane(new Plane(1L, "Boeing 737", 2, 300, true, null))
                 .withDepartTime(from.plusDays(10))
                 .withArrivalTime(from.plusHours(5))
                 .build();
         Flight secondFlight = Flight.builder()
                 .withId(2L)
-                .withPlane(new Plane(2L, "Airbus a380", 500, true, null))
+                .withPlane(new Plane(2L, "Airbus a380", 2, 500, true, null))
                 .withDepartTime(from.plusDays(2))
                 .withArrivalTime(from.plusHours(10))
                 .build();
