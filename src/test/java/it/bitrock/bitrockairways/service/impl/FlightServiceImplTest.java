@@ -3,7 +3,10 @@ package it.bitrock.bitrockairways.service.impl;
 import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Flight;
 import it.bitrock.bitrockairways.model.TrafficTimeSlot;
+import it.bitrock.bitrockairways.repository.AirportRepository;
+import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.repository.FlightRepository;
+import it.bitrock.bitrockairways.repository.RouteRepository;
 import it.bitrock.bitrockairways.service.FlightService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +23,21 @@ import static org.mockito.Mockito.*;
 class FlightServiceImplTest {
     private FlightRepository flightRepository;
 
+    private CustomerRepository customerRepository;
+
+    private AirportRepository airportRepository;
+
+    private RouteRepository routeRepository;
+
     private FlightService flightService;
 
     @BeforeEach
     void setUp() {
         this.flightRepository = mock(FlightRepository.class);
-        this.flightService = new FlightServiceImpl(flightRepository);
+        this.customerRepository = mock(CustomerRepository.class);
+        this.airportRepository = mock(AirportRepository.class);
+        this.routeRepository = mock(RouteRepository.class);
+        this.flightService = new FlightServiceImpl(flightRepository, customerRepository, airportRepository, routeRepository);
     }
 
     @Test

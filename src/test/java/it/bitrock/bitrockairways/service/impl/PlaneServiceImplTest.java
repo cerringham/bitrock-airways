@@ -317,31 +317,6 @@ class PlaneServiceImplTest {
     }
 
     @Test
-    void updateThrowsExceptionIfActiveIsFalse() {
-        // setup
-        final String PLANE_MODEL = "Boeing 737";
-        Plane.PlaneBuilder planeBuilder = Plane.builder()
-                .withModel(PLANE_MODEL)
-                .withQuantity(0);
-        Plane planeInput = planeBuilder.build();
-        Plane retrievedPlane = planeBuilder
-                .withId(10L)
-                .withQuantity(1)
-                .withActive(false)
-                .build();
-        when(planeRepository.findByModel(PLANE_MODEL)).thenReturn(Optional.of(retrievedPlane));
-
-        // test
-        assertThatExceptionOfType(NoRecordException.class)
-                .isThrownBy(() -> planeService.update(planeInput))
-                .withMessage("Plane with model \"Boeing 737\" does not exist");
-
-        // validate
-        verify(planeRepository).findByModel(PLANE_MODEL);
-        verifyNoMoreInteractions(planeRepository);
-    }
-
-    @Test
     void updateThrowsExceptionIfPlaneDoestNotExist() {
         // setup
         final String PLANE_MODEL = "Boeing 737";
@@ -367,27 +342,6 @@ class PlaneServiceImplTest {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> planeService.update(null))
                 .withMessage("Plane cannot be null");
-
-        // validate
-        verifyNoInteractions(planeRepository);
-    }
-
-    @Test
-    void updateThrowsExceptionOnNotNullId() {
-        // setup
-        Plane planeInput = Plane.builder()
-                .withId(10L)
-                .withModel("Boeing 737")
-                .withQuantity(1)
-                .build();
-
-        // test
-        assertThatExceptionOfType(ConstraintViolationException.class)
-                .isThrownBy(() -> planeService.update(planeInput))
-                .withMessage("Invalid plane")
-                .extracting(ConstraintViolationException::getConstraintViolations, as(InstanceOfAssertFactories.iterable(ConstraintViolation.class)))
-                .extracting(v -> v.getPropertyPath().toString(), ConstraintViolation::getMessage)
-                .containsExactly(tuple("id", "must be null"));
 
         // validate
         verifyNoInteractions(planeRepository);

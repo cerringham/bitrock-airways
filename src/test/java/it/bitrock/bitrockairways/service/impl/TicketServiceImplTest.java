@@ -20,9 +20,22 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
 class TicketServiceImplTest {
-    @Autowired
+    private TicketRepository ticketRepository;
+
+    private CustomerService customerService;
+
+    private FidelityPointsRepository fidelityPointsRepository;
+
+
     private TicketServiceImpl ticketService;
 
+    @BeforeEach
+    void setUp() {
+        this.ticketRepository = mock(TicketRepository.class);
+        this.customerService = mock(CustomerService.class);
+        this.fidelityPointsRepository = mock(FidelityPointsRepository.class);
+        this.ticketService = new TicketServiceImpl(ticketRepository, customerService, fidelityPointsRepository);
+    }
 
     @Test
     void getTicketsByCustomerBeforeNowShouldReturnTickets() {
@@ -50,8 +63,8 @@ class TicketServiceImplTest {
 
         // validate
         assertThat(ticketsRetrieved).containsExactlyInAnyOrderElementsOf(tickets);
-        verify(ticketService).getTicketsByCustomerBeforeNow(customer);
-        verifyNoMoreInteractions(ticketService);
+        verify(ticketRepository).getTicketsByCustomerBeforeNow(customer);
+        verifyNoMoreInteractions(ticketRepository);
     }
 
     @Test
@@ -62,7 +75,7 @@ class TicketServiceImplTest {
                 .withMessage("customer cannot be null");
 
         // validate
-        verifyNoInteractions(ticketService);
+        verifyNoInteractions(ticketRepository);
     }
 
     private Ticket buildTicket(Long id, Customer customer, String reservationCode, String seatNumber) {

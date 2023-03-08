@@ -9,6 +9,8 @@ import it.bitrock.bitrockairways.repository.AirportRepository;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.repository.FlightRepository;
 import it.bitrock.bitrockairways.repository.RouteRepository;
+import it.bitrock.bitrockairways.service.impl.FlightServiceImpl;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -28,22 +30,26 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class FlightServiceTest {
 
-    @InjectMocks
     FlightService flightService;
 
-    @Mock
     AirportRepository airportRepository;
-    @Mock
     RouteRepository routeRepository;
-    @Mock
     CustomerRepository customerRepository;
-    @Mock
     FlightRepository flightRepository;
+
+    @Before
+    public void setUp() throws Exception {
+        this.airportRepository = mock(AirportRepository.class);
+        this.routeRepository = mock(RouteRepository.class);
+        this.customerRepository = mock(CustomerRepository.class);
+        this.flightRepository = mock(FlightRepository.class);
+        this.flightService = new FlightServiceImpl(flightRepository, customerRepository, airportRepository, routeRepository);
+    }
 
     //Rule to verify exceptions throwing
     @Rule

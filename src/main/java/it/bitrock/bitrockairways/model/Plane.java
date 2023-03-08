@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "plane")
 public class Plane {
-    @Null(groups = OnUpdate.class)
+    @Null(groups = OnCreate.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

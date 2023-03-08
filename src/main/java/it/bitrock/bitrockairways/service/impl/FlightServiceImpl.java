@@ -1,10 +1,15 @@
 package it.bitrock.bitrockairways.service.impl;
 
+import it.bitrock.bitrockairways.dto.CustomerFlightSearchDTO;
 import it.bitrock.bitrockairways.exception.NoRecordException;
 import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Flight;
+import it.bitrock.bitrockairways.model.Route;
 import it.bitrock.bitrockairways.model.TrafficTimeSlot;
+import it.bitrock.bitrockairways.repository.AirportRepository;
+import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.repository.FlightRepository;
+import it.bitrock.bitrockairways.repository.RouteRepository;
 import it.bitrock.bitrockairways.service.FlightService;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +22,17 @@ public class FlightServiceImpl implements FlightService {
 
     private final FlightRepository flightRepository;
 
-    public FlightServiceImpl(FlightRepository flightRepository) {
+    private final CustomerRepository customerRepository;
+
+    private final AirportRepository airportRepository;
+
+    private final RouteRepository routeRepository;
+
+    public FlightServiceImpl(FlightRepository flightRepository, CustomerRepository customerRepository, AirportRepository airportRepository, RouteRepository routeRepository) {
         this.flightRepository = flightRepository;
+        this.customerRepository = customerRepository;
+        this.airportRepository = airportRepository;
+        this.routeRepository = routeRepository;
     }
 
     @Override
@@ -93,5 +107,29 @@ public class FlightServiceImpl implements FlightService {
         }
 
         return hub;
+    }
+
+    public List<Flight> getFutureFlightsByRoute(CustomerFlightSearchDTO dto) throws NoRecordException {
+        if (!customerRepository.existsById(dto.getCustomerId())) {
+            throw new NoRecordException("Customer with id " + dto.getCustomerId() + " doesn't exist!");
+        }
+        Airport departureAirport = airportRepository.findByInternationalCode(dto.getDepartureAirportInternationalCode())
+                .orElseThrow(() -> new NoRecordException("Airport " + dto.getDepartureAirportInternationalCode() + " is not included into the available routes"));
+        Airport arrivalAirport = airportRepository.findByInternationalCode(dto.getArrivalAirportInternationalCode())
+                .orElseThrow(() -> new NoRecordException("Airport " + dto.getArrivalAirportInternationalCode() + " is not included into the available routes"));
+
+        ZonedDateTime dateOfRequest = ZonedDateTime.now();
+        Route route = routeRepository.findByDepartureAndArrivalAirportId(departureAirport.getId(), arrivalAirport.getId())
+                .orElseThrow(() -> new NoRecordException("No route corresponding to the given airports"));
+
+        List<Flight> allRouteFlights = flightRepository.findByRouteId(route.getId());
+        List<Flight> futureFlights = allRouteFlights.stream()
+                .filter(i->i.getDepartTime().isAfter(dateOfRequest))
+                .toList();
+
+        if(futureFlights.isEmpty()) {
+            throw new NoRecordException("No scheduled flights starting from " + dateOfRequest);
+        }
+        return futureFlights;
     }
 }
