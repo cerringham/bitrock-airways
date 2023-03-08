@@ -2,10 +2,13 @@ package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import it.bitrock.bitrockairways.repository.FidelityPointsRepository;
+import it.bitrock.bitrockairways.repository.TicketRepository;
+import it.bitrock.bitrockairways.service.CustomerService;
+import it.bitrock.bitrockairways.service.TicketService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -16,14 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class TicketServiceImplTest {
+class TicketServiceImplTest {
+    @Autowired
+    private TicketServiceImpl ticketService;
 
-    @Mock
-    TicketServiceImpl ticketService;
 
     @Test
-    public void getTicketsByCustomerBeforeNowShouldReturnTickets() {
+    void getTicketsByCustomerBeforeNowShouldReturnTickets() {
         // setup
         Customer customer = Customer.builder()
                 .withId(10L)
@@ -52,8 +54,8 @@ public class TicketServiceImplTest {
         verifyNoMoreInteractions(ticketService);
     }
 
-/*    @Test
-    public void getTicketsByCustomerBeforeNowShouldThrowExceptionOnNullCustomer() {
+    @Test
+    void getTicketsByCustomerBeforeNowShouldThrowExceptionOnNullCustomer() {
         // test
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> ticketService.getTicketsByCustomerBeforeNow(null))
@@ -61,7 +63,7 @@ public class TicketServiceImplTest {
 
         // validate
         verifyNoInteractions(ticketService);
-    }*/
+    }
 
     private Ticket buildTicket(Long id, Customer customer, String reservationCode, String seatNumber) {
         return Ticket.builder()
