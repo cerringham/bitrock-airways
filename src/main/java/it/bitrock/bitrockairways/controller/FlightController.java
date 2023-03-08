@@ -23,7 +23,7 @@ public class FlightController {
         return flightService.flightsBetweenDates(from, to);
     }
 
-    @GetMapping("/list_of_routes")
+    @GetMapping("/flight/list_of_routes")
     public ResponseEntity getRoutes(@RequestBody CustomerFlightSearchDTO dto) throws Exception {
         return ResponseEntity.ok(flightService.getFutureFlightsByRoute(dto));
     }

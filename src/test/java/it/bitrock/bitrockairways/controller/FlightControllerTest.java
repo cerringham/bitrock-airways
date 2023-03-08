@@ -136,7 +136,7 @@ public class FlightControllerTest {
     public void givenValidFlightSearchDto_whenGettingFutureFlights_thenStatusIsOk() throws Exception {
         CustomerFlightSearchDTO flightSearchDTO = new CustomerFlightSearchDTO(1L,"MXP","NYC");
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/flight/list_of_routes")
+                        .get("/api/flight/list_of_routes")
                         .content(om.writeValueAsString(flightSearchDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -146,7 +146,7 @@ public class FlightControllerTest {
     @Test
     public void givenNoFlightSearchDto_whenGettingFutureFlights_thenStatusIsBadRequest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/flight/list_of_routes")
+                        .get("/api/flight/list_of_routes")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
