@@ -23,5 +23,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> getCustomersInFidelityProgram();
 
     @Query("FROM FidelityPoints fp WHERE fp.customer.id = :customerId")
-    Optional<FidelityPoints> getCustomerFromFidelityProgram(Long customerId);
+    Optional<FidelityPoints> getCustomerFromFidelityProgram(long customerID);
 }

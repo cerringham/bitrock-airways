@@ -21,15 +21,18 @@ import java.util.stream.Collectors;
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
+    private final TicketService ticketService;
     private final CustomerService customerService;
     private final FidelityPointsRepository fidelityPointsRepository;
 
     public TicketServiceImpl(TicketRepository ticketRepository,
                              CustomerService customerService,
-                             FidelityPointsRepository fidelityPointsRepository) {
+                             FidelityPointsRepository fidelityPointsRepository,
+                             TicketService ticketService) {
         this.ticketRepository = ticketRepository;
         this.customerService = customerService;
         this.fidelityPointsRepository = fidelityPointsRepository;
+        this.ticketService = ticketService;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setDateBought(ZonedDateTime.now());
         ticket.setReservationCode(generateReservationCode(flight));
         try {
-            ticket.setSeatNumber(getFlightRandomAvailableSeat(flight.getPlane().getModel(), flight.getId()));
+            ticket.setSeatNumber(ticketService.getFlightRandomAvailableSeat(flight.getPlane().getModel(), flight.getId()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

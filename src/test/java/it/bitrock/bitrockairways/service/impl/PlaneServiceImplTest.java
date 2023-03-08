@@ -8,7 +8,6 @@ import it.bitrock.bitrockairways.repository.PlaneRepository;
 import it.bitrock.bitrockairways.service.PlaneService;
 import jakarta.validation.*;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +71,7 @@ class PlaneServiceImplTest {
         verifyNoInteractions(planeRepository);
     }
 
-/*    @Test
+    @Test
     void createThrowsExceptionOnNotNullId() {
         // setup
         Plane planeInput = Plane.builder()
@@ -93,7 +92,7 @@ class PlaneServiceImplTest {
 
         // validate
         verifyNoInteractions(planeRepository);
-    }*/
+    }
 
     @Test
     void createThrowsExceptionOnInvalidModel() {
@@ -317,8 +316,8 @@ class PlaneServiceImplTest {
         verifyNoMoreInteractions(planeRepository);
     }
 
-/*    @Test
-   void updateThrowsExceptionIfActiveIsFalse() {
+    @Test
+    void updateThrowsExceptionIfActiveIsFalse() {
         // setup
         final String PLANE_MODEL = "Boeing 737";
         Plane.PlaneBuilder planeBuilder = Plane.builder()
@@ -340,7 +339,7 @@ class PlaneServiceImplTest {
         // validate
         verify(planeRepository).findByModel(PLANE_MODEL);
         verifyNoMoreInteractions(planeRepository);
-    }*/
+    }
 
     @Test
     void updateThrowsExceptionIfPlaneDoestNotExist() {
@@ -373,7 +372,7 @@ class PlaneServiceImplTest {
         verifyNoInteractions(planeRepository);
     }
 
-/*    @Test
+    @Test
     void updateThrowsExceptionOnNotNullId() {
         // setup
         Plane planeInput = Plane.builder()
@@ -393,7 +392,7 @@ class PlaneServiceImplTest {
 
         // validate
         verifyNoInteractions(planeRepository);
-    }*/
+    }
 
     @Test
     void updateThrowsExceptionOnInvalidModel() {
