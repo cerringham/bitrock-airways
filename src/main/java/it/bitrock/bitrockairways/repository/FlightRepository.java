@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
+
     @Query("select f from Flight f where f.active and f.route.departureAirport = :airport")
     List<Flight> findDeparturesByAirport(Airport airport);
 
@@ -20,4 +21,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     List<Flight> findByDepartTimeBetween(ZonedDateTime start, ZonedDateTime end);
 
     List<Flight> findByArrivalTimeBetween(ZonedDateTime start, ZonedDateTime end);
+
+    @Query("Select f FROM Flight f WHERE f.route.id = ?1")
+    List<Flight> findByRouteId(Long id);
+
 }
