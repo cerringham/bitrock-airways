@@ -5,10 +5,7 @@ import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.service.CustomerService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,17 +22,13 @@ public class CustomerController {
         this.ticketService = ticketService;
     }
 
-
     @GetMapping("/customers")
-    public ResponseEntity<List<Customer>> getCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
-        return ResponseEntity.ok(customers);
-    }
-
-    @GetMapping("/customers/{age}")
-    public ResponseEntity<List<Customer>> getCustomersByAge(@PathVariable(value = "id") Integer age) {
-        List<Customer> customers = customerService.getAllCustomersByAge(age);
-        return ResponseEntity.ok(customers);
+    public List<Customer> getCustomers(@RequestParam(required = false) Integer age) {
+        if (age == null) {
+            return customerService.getAllCustomers();
+        } else {
+            return customerService.getAllCustomersByAge(age);
+        }
     }
 
     @GetMapping("/customers/fidelityprogram")

@@ -2,8 +2,11 @@ package it.bitrock.bitrockairways.controller;
 
 import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Customer;
+import it.bitrock.bitrockairways.model.Flight;
 import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.model.dto.TicketCreateDTO;
+import it.bitrock.bitrockairways.service.CustomerService;
+import it.bitrock.bitrockairways.service.FlightService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +19,15 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    public TicketController(TicketService ticketService) {
+    private final CustomerService customerService;
+
+    private final FlightService flightService;
+
+
+    public TicketController(TicketService ticketService, CustomerService customerService, FlightService flightService) {
         this.ticketService = ticketService;
+        this.customerService = customerService;
+        this.flightService = flightService;
     }
 
 
@@ -33,7 +43,10 @@ public class TicketController {
     }
 
     @PutMapping("/tickets")
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreateDTO ticketCreateDTO) {
-        return ResponseEntity.ok(null);
+    public Ticket createTicket(@RequestBody TicketCreateDTO ticketCreateDTO) {
+        Customer customer = customerService.getById(ticketCreateDTO.getClientID());
+        Flight flight = flightService.getById(ticketCreateDTO.getFlightID());
+
+        return ticketService.createTicket(flight, customer);
     }
 }

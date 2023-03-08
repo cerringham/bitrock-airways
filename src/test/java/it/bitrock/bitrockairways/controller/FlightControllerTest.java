@@ -3,6 +3,7 @@ package it.bitrock.bitrockairways.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import it.bitrock.bitrockairways.dto.CustomerFlightSearchDTO;
 import it.bitrock.bitrockairways.model.Flight;
 import it.bitrock.bitrockairways.model.Plane;
 import it.bitrock.bitrockairways.service.FlightService;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FlightController.class)
-class FlightControllerTest {
+public class FlightControllerTest {
     private static final ObjectMapper om = new ObjectMapper();
 
     @Autowired
@@ -130,4 +131,24 @@ class FlightControllerTest {
         verify(flightService).flightsBetweenDates(from, to);
         verifyNoMoreInteractions(flightService);
     }
+
+    @Test
+    public void givenValidFlightSearchDto_whenGettingFutureFlights_thenStatusIsOk() throws Exception {
+        CustomerFlightSearchDTO flightSearchDTO = new CustomerFlightSearchDTO(1L,"MXP","NYC");
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/flight/list_of_routes")
+                        .content(om.writeValueAsString(flightSearchDTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNoFlightSearchDto_whenGettingFutureFlights_thenStatusIsBadRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/flight/list_of_routes")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }
+

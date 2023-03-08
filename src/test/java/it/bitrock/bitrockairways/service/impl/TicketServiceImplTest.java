@@ -2,10 +2,13 @@ package it.bitrock.bitrockairways.service.impl;
 
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
+import it.bitrock.bitrockairways.repository.FidelityPointsRepository;
 import it.bitrock.bitrockairways.repository.TicketRepository;
+import it.bitrock.bitrockairways.service.CustomerService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,14 +20,21 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
 class TicketServiceImplTest {
-    private TicketService ticketService;
-
     private TicketRepository ticketRepository;
+
+    private CustomerService customerService;
+
+    private FidelityPointsRepository fidelityPointsRepository;
+
+
+    private TicketServiceImpl ticketService;
 
     @BeforeEach
     void setUp() {
-        ticketRepository = mock(TicketRepository.class);
-        ticketService = new TicketServiceImpl(ticketRepository);
+        this.ticketRepository = mock(TicketRepository.class);
+        this.customerService = mock(CustomerService.class);
+        this.fidelityPointsRepository = mock(FidelityPointsRepository.class);
+        this.ticketService = new TicketServiceImpl(ticketRepository, customerService, fidelityPointsRepository);
     }
 
     @Test
@@ -46,7 +56,7 @@ class TicketServiceImplTest {
             buildTicket(20L, customer, "789", "5H")
         );
 
-        when(ticketRepository.getTicketsByCustomerBeforeNow(customer)).thenReturn(tickets);
+        when(ticketService.getTicketsByCustomerBeforeNow(customer)).thenReturn(tickets);
 
         // test
         List<Ticket> ticketsRetrieved = ticketService.getTicketsByCustomerBeforeNow(customer);

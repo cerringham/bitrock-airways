@@ -67,12 +67,10 @@ VALUES
 ('Lorenzo', 'Gotti', 'lorenzo@gmail.com', '7451249857', '2023-01-01', 8, 1, TRUE, NULL),
 ('Patrizio', 'Germano', 'patrizio@gmail.com', '7895462154', '2016-02-17', 8, 1, TRUE, NULL);
 
-INSERT INTO plane(model, seats_count, active, date_inactivated)
+INSERT INTO plane(model, quantity, seats_count, active, date_inactivated)
 VALUES
-('Boeing 787 (A)', 400, TRUE, NULL),
-('Boeing 787 (B)', 400, TRUE, NULL),
-('Boeing 777 (A)', 320, TRUE, NULL),
-('Boeing 777 (B)', 320, TRUE, NULL);
+('Boeing 787', 2, 400, TRUE, NULL),
+('Boeing 777', 2, 320, TRUE, NULL);
 
 INSERT INTO fidelity_points(customer_id, points, active, date_inactivated)
 VALUES
@@ -94,16 +92,15 @@ VALUES
 (2, 6, TRUE, NULL),
 (6, 2, TRUE, NULL);
 
-INSERT INTO routes_constraint(route_id,plane_id,active,date_inactivated)
+INSERT INTO routes_constraint(route_id, plane_id, active, date_inactivated)
 VALUES
-(1,1,TRUE,NULL),
-(10,2,TRUE,NULL),
-(7,4,TRUE,NULL),
-(5,3,TRUE,NULL);
+(9, 1, TRUE, NULL),
+(10, 1, TRUE, NULL);
 
 INSERT INTO flight(route_id,plane_id,depart_time,arrival_time,active,date_inactivated)
 VALUES
 (1, 1, '2023-02-28 19:10:00-00','2023-02-28 20:10:00-00', TRUE, NULL),
+(2, 1, '2023-03-20 08:10:00-00','2023-03-20 20:10:00-00', TRUE, NULL),
 (3, 1, '2023-03-15 08:00:00-00','2023-03-15 10:50:00-00', TRUE, NULL),
 (7, 1, '2023-03-16 12:45:00-00','2023-03-16 13:45:00-00', TRUE, NULL),
 (5, 1, '2023-03-17 14:15:00-00','2023-03-17 19:25:00-00', TRUE, NULL),
