@@ -23,4 +23,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("select t from Ticket t join t.customer where t.customer = :customer and t.dateBought < current_date")
     List<Ticket> getTicketsByCustomerBeforeNow(Customer customer);
+
+    List<Ticket> findAllByCustomerId(Long customerID);
 }

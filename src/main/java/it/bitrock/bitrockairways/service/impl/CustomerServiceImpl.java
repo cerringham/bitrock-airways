@@ -1,25 +1,33 @@
 package it.bitrock.bitrockairways.service.impl;
 
+import it.bitrock.bitrockairways.dto.CustomerFidelityDataDTO;
 import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.FidelityPoints;
+import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
+import it.bitrock.bitrockairways.repository.TicketRepository;
 import it.bitrock.bitrockairways.service.CustomerService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final TicketRepository ticketRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, TicketRepository ticketRepository) {
         this.customerRepository = customerRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
@@ -45,6 +53,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getAllCustomersInFidelityProgram() {
         return customerRepository.getCustomersInFidelityProgram();
+    }
+
+    @Override
+    public List<CustomerFidelityDataDTO> getAllFidelityCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerFidelityDataDTO> fidelityDataDTO = new ArrayList<>();
+        for (Customer customer : customers) {
+            List<Ticket> tickets = ticketRepository.findAllByCustomerId(customer.getId());
+            int totalPoints = tickets.size() * 100;
+            fidelityDataDTO.add(new CustomerFidelityDataDTO(customer.getId(), customer.getName(), customer.getSurname(), customer.getEmail(), totalPoints));
+        }
+        return fidelityDataDTO.stream().sorted(Comparator.comparingInt(CustomerFidelityDataDTO::getTotalPoints).reversed()).collect(Collectors.toList());
     }
 
     @Override

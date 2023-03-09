@@ -1,5 +1,6 @@
 package it.bitrock.bitrockairways.controller;
 
+import it.bitrock.bitrockairways.dto.CustomerFidelityDataDTO;
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
 import it.bitrock.bitrockairways.service.CustomerService;
@@ -34,6 +35,12 @@ public class CustomerController {
     @GetMapping("/customers/fidelityprogram")
     public ResponseEntity<List<Customer>> getCustomersInFidelityProgram() {
         List<Customer> customers = customerService.getAllCustomersInFidelityProgram();
+        return ResponseEntity.ok(customers);
+    }
+
+    @GetMapping("/customers/most-fidelity-customer")
+    public ResponseEntity<List<CustomerFidelityDataDTO>> getMostFidelityCustomers() {
+        List<CustomerFidelityDataDTO> customers = customerService.getAllFidelityCustomers();
         return ResponseEntity.ok(customers);
     }
 
