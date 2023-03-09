@@ -15,7 +15,7 @@ public class FidelityProgramUserXlsExporterTest {
 
     private final String filePath = "/tmp/most-fidelity-customer.xls";
     private final List<FidelityProgramUserDTO> users = generateFidelityProgramUsersList();
-    private final FidelityProgramUserXlsExporter exporter = new FidelityProgramUserXlsExporter(users);
+    private final FidelityProgramUserXlsExporter exporter = new FidelityProgramUserXlsExporter(filePath, users);
 
 
     @Test

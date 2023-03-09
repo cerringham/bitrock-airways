@@ -13,11 +13,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class FidelityProgramUserXlsExporter {
+    private final String filePath;
     private final XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private final List<FidelityProgramUserDTO> usersList;
 
-    public FidelityProgramUserXlsExporter(List<FidelityProgramUserDTO> usersList) {
+    public FidelityProgramUserXlsExporter(String filePath, List<FidelityProgramUserDTO> usersList) {
+        this.filePath = filePath;
         this.usersList = usersList;
         workbook = new XSSFWorkbook();
     }
@@ -78,7 +80,7 @@ public class FidelityProgramUserXlsExporter {
         writeHeaderLine();
         writeDataLines();
 
-        FileOutputStream out = new FileOutputStream("/tmp/most-fidelity-customer.xls"); // file name with path
+        FileOutputStream out = new FileOutputStream(filePath); // file name with path
         workbook.write(out);
         out.close();
 
