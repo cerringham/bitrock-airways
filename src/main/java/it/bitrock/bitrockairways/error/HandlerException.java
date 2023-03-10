@@ -1,9 +1,6 @@
 package it.bitrock.bitrockairways.error;
 
-import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
-import it.bitrock.bitrockairways.exception.InvalidPlaneQuantityException;
-import it.bitrock.bitrockairways.exception.NoRecordException;
-import it.bitrock.bitrockairways.exception.PlaneAlreadyExistsException;
+import it.bitrock.bitrockairways.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +49,12 @@ public class HandlerException {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(InvalidPlaneQuantityException.class)
     public String handleInvalidPlaneQuantityException(InvalidPlaneQuantityException e) {
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(CustomersFileWriteException.class)
+    public String handleCustomersFileWriteException(CustomersFileWriteException e) {
         return e.getMessage();
     }
 }
