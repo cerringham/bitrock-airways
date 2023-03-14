@@ -3,6 +3,7 @@ package it.bitrock.bitrockairways.service.impl;
 import it.bitrock.bitrockairways.exception.CustomerNotFoundException;
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
+import it.bitrock.bitrockairways.repository.TicketRepository;
 import it.bitrock.bitrockairways.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,13 @@ class CustomerServiceImplTest {
 
     private CustomerRepository customerRepository;
 
+    private TicketRepository ticketRepository;
+
     @BeforeEach
     void setUp() {
         customerRepository = mock(CustomerRepository.class);
-        customerService = new CustomerServiceImpl(customerRepository);
+        ticketRepository = mock(TicketRepository.class);
+        customerService = new CustomerServiceImpl(customerRepository, ticketRepository);
     }
 
     @Test
