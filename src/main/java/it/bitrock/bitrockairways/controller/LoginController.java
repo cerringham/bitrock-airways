@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @GetMapping("/login/success")
-    public String success() {
+    public String success(OAuth2AuthenticationToken token) {
+        System.out.println(token.getPrincipal());
         return "success.html";
     }
 
-    @GetMapping("/login2")
-    public String login() {
+    //@GetMapping("/login")
+    //public String login() {
+    //    return "login.html";
+    //}
+
+    @GetMapping("/login/oauth2")
+    public String loginOauth() {
         return "login.html";
     }
 
