@@ -12,8 +12,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityConfig(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests()
+                .requestMatchers("/loginSuccess").authenticated()
                 .anyRequest().permitAll()
                 .and().oauth2Login()
+                .loginPage("/oauth_login")
                 .redirectionEndpoint().baseUri("/success.html")
                 .and().defaultSuccessUrl("/loginSuccess")
                 .failureHandler(new SimpleUrlAuthenticationFailureHandler("/loginFailure"))
