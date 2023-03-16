@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign In Page</title>
+    <title style="font-size: 36px; font-weight: bold; color: white; text-shadow: 2px 2px 4px #000000;">Log In Page</title>
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      .google-button {
+        background-color: #EA4335;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+      }
+
+      a {
+        text-decoration: none;
+      }
+    </style>
 </head>
 <body style="text-align: center;">
-
-<h1>Sign In</h1>
-
+<h1 style="margin-top: 40px;">Log In</h1>
 <form style="display: inline-block; text-align: left;">
-    <label for="password" style="display: block; margin-bottom: 10px;">Password:</label>
-    <input type="password" id="password" name="password" required style="display: block; margin-bottom: 20px;">
-
     <label for="email" style="display: block; margin-bottom: 10px;">Email:</label>
     <input type="email" id="email" name="email" required style="display: block; margin-bottom: 20px;">
-
-    <input type="submit" value="Sign In" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+    <label for="password" style="display: block; margin-bottom: 10px;">Password:</label>
+    <input type="password" id="password" name="password" required style="display: block; margin-bottom: 20px;">
+    <input type="submit" value="Log In" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; display: block; margin: 0 auto;">
 </form>
-
-<br><br>
-<button style="background-color: #4285F4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-    Sign In with Google
-</button>
-
+<br>
+<br>
+<a href="https://www.oauth2/authorization/github">
+    <button class="google-button"> Log In with Google </button>
+</a>
 </body>
 </html>

@@ -17,21 +17,22 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/login/success");
         return http.build();*/
 
-        /*http.authorizeHttpRequests()
-                .requestMatchers("/login", "/login.html").permitAll()
+        http.authorizeHttpRequests()
+                .requestMatchers("/login", "/login.html"
+                        , "/success.html", "/failure.html").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .oauth2Login()
                 //.and()
                 //.formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/login/success");
+                .loginPage("/login");
+                //.defaultSuccessUrl("/login/success");
 
-        return http.build();*/
-
-        http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login();
         return http.build();
+
+        /*http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login();
+        return http.build();*/
     }
 
 

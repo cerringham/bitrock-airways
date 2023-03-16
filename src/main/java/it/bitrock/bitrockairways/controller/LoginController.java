@@ -1,12 +1,28 @@
 package it.bitrock.bitrockairways.controller;
 
+import ch.qos.logback.core.model.Model;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ResolvableType;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class LoginController {
+
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+
+    private static String authorizationRequestBaseUri
+            = "oauth2/authorization";
+    Map<String, String> oauth2AuthenticationUrls
+            = new HashMap<>();
 
     @GetMapping("/login/success")
     public String success(OAuth2AuthenticationToken token) {
@@ -14,10 +30,7 @@ public class LoginController {
         return "success.html";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login.html";
-    }
+
 
     @GetMapping("/login/oauth2")
     public String loginOauth() {
@@ -33,8 +46,28 @@ public class LoginController {
     @GetMapping("/")
     public String tempMain(OAuth2AuthenticationToken token) {
         System.out.println(token.getPrincipal());
-        return "secure.html";
+        return "success.html";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        Iterable<ClientRegistration> clientRegistrations = null;
+        ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
+                .as(Iterable.class);
+        if (type != ResolvableType.NONE &&
+                ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
+            clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
+        }
+
+        clientRegistrations.forEach(registration ->
+                oauth2AuthenticationUrls.put(registration.getClientName(),
+                        authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
+
+        //model.addAttribute("urls", oauth2AuthenticationUrls);
+
+        return "login.html";
+    }
+
 
     /*private final Iterable<ClientRegistration> clientRegistrationRepository;
 
