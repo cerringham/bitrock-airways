@@ -4,56 +4,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
+    public HttpSessionSecurityContextRepository sessionSecurityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        /*http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login()
-                .redirectionEndpoint()
-                .baseUri("/success.html")
-                .and()
-                .defaultSuccessUrl("/login/success");
-        return http.build();*/
 
         http.authorizeHttpRequests()
                 .requestMatchers("/login", "/login.html"
-                        , "/success.html", "/failure.html").permitAll()
+                 ,"/success.html").permitAll()
+                //.anyRequest()
+                //.requestMatchers("/success", "/success.html")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .oauth2Login()
                 //.and()
                 //.formLogin()
-                .loginPage("/login");
-                //.defaultSuccessUrl("/login/success");
-
+                .loginPage("/login")
+                .defaultSuccessUrl("/success",true)
+        ;
         return http.build();
 
         /*http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login();
         return http.build();*/
     }
 
-
-    /*@Bean
-    public SecurityFilterChain securityConfig(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests()
-                .anyRequest().permitAll()
-                .and().oauth2Login()
-                .redirectionEndpoint().baseUri("/success.html")
-                .and().defaultSuccessUrl("/loginSuccess")
-                .failureHandler(new SimpleUrlAuthenticationFailureHandler("/loginFailure"))
-                .and().build();
-    }*/
-
-/*    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2Login();
-        return http.build();
-    }*/
 
 }
