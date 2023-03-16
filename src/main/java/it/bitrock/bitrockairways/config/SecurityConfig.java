@@ -8,16 +8,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-/*    @Bean
+    @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login()
+        /*http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login()
                 .redirectionEndpoint()
                 .baseUri("/success.html")
                 .and()
                 .defaultSuccessUrl("/login/success");
-        return http.build();
+        return http.build();*/
 
-        http.authorizeHttpRequests()
+        /*http.authorizeHttpRequests()
                 .requestMatchers("/login", "/login.html").permitAll()
                 .anyRequest()
                 .authenticated()
@@ -25,11 +25,14 @@ public class SecurityConfig {
                 .oauth2Login()
                 //.and()
                 //.formLogin()
-                //.loginPage("/login")
+                .loginPage("/login")
                 .defaultSuccessUrl("/login/success");
 
+        return http.build();*/
+
+        http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login();
         return http.build();
-    }*/
+    }
 
 
     /*@Bean
@@ -43,13 +46,13 @@ public class SecurityConfig {
                 .and().build();
     }*/
 
-    @Bean
+/*    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login();
         return http.build();
-    }
+    }*/
 
 }

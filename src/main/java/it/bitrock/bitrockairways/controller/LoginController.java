@@ -14,20 +14,26 @@ public class LoginController {
         return "success.html";
     }
 
-    //@GetMapping("/login")
-    //public String login() {
-    //    return "login.html";
-    //}
+    @GetMapping("/login")
+    public String login() {
+        return "login.html";
+    }
 
     @GetMapping("/login/oauth2")
     public String loginOauth() {
-        return "login.html";
+        return "success.html";
     }
 
     @GetMapping("/success")
     public String main(OAuth2AuthenticationToken token) {
         System.out.println(token.getPrincipal());
         return "success.html";
+    }
+
+    @GetMapping("/")
+    public String tempMain(OAuth2AuthenticationToken token) {
+        System.out.println(token.getPrincipal());
+        return "secure.html";
     }
 
     /*private final Iterable<ClientRegistration> clientRegistrationRepository;
