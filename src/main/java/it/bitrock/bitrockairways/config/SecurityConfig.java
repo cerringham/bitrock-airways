@@ -18,23 +18,32 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests()
-                .requestMatchers("/login", "/login.html"
-                 ,"/success.html").permitAll()
-                //.anyRequest()
-                //.requestMatchers("/success", "/success.html")
+                .requestMatchers("/login",  "/failure").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .oauth2Login()
-                //.and()
-                //.formLogin()
                 .loginPage("/login")
+                .redirectionEndpoint().baseUri("/success.html")
+                .and()
                 .defaultSuccessUrl("/success",true)
-        ;
+                .failureUrl("/failure");
+
         return http.build();
 
-        /*http.authorizeHttpRequests().anyRequest().authenticated().and().oauth2Login();
+        /*http.authorizeHttpRequests()
+                .requestMatchers("/", "/success", "success.html").authenticated()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .redirectionEndpoint().baseUri("/success.html")
+                .and()
+                .defaultSuccessUrl("/success",true)
+                ;
         return http.build();*/
+
     }
 
 

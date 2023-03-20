@@ -7,27 +7,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login/oauth2")
-    public String loginOauth() {
-        return "success.html";
+    @GetMapping("/success")
+    public String success() {
+        return "success";
     }
 
-    @GetMapping("/success")
-    public String main() {
-        //OAuth2AuthenticationToken token
-        //System.out.println(token.getPrincipal());
-        return "success.html";
+    @GetMapping("/failure")
+    public String failure() {
+        return "failure";
     }
 
     @GetMapping("/")
-    public String tempMain(OAuth2AuthenticationToken token) {
-        System.out.println(token.getPrincipal());
-        return "success.html";
+    public String main() {
+        return " ";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login.html";
+        return "login";
     }
 
 
