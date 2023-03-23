@@ -1,6 +1,6 @@
 package it.bitrock.bitrockairways.utility;
 
-import it.bitrock.bitrockairways.model.dto.FidelityProgramUserDTO;
+import it.bitrock.bitrockairways.model.dto.CustomerFidelityPointDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,9 +16,9 @@ public class FidelityProgramUserXlsExporter {
     private final String filePath;
     private final XSSFWorkbook workbook;
     private XSSFSheet sheet;
-    private final List<FidelityProgramUserDTO> usersList;
+    private final List<CustomerFidelityPointDTO> usersList;
 
-    public FidelityProgramUserXlsExporter(String filePath, List<FidelityProgramUserDTO> usersList) {
+    public FidelityProgramUserXlsExporter(String filePath, List<CustomerFidelityPointDTO> usersList) {
         this.filePath = filePath;
         this.usersList = usersList;
         workbook = new XSSFWorkbook();
@@ -64,14 +64,14 @@ public class FidelityProgramUserXlsExporter {
         font.setFontHeight(14);
         style.setFont(font);
 
-        for (FidelityProgramUserDTO user : usersList) {
+        for (CustomerFidelityPointDTO user : usersList) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
 
             createCell(row, columnCount++, user.getName(), style);
             createCell(row, columnCount++, user.getSurname(), style);
             createCell(row, columnCount++, user.getEmail(), style);
-            createCell(row, columnCount++, user.getTotalPoints(), style);
+            createCell(row, columnCount++, user.getPoints().intValue(), style);
 
         }
     }
