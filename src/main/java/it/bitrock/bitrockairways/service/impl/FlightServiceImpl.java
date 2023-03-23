@@ -6,6 +6,7 @@ import it.bitrock.bitrockairways.model.Airport;
 import it.bitrock.bitrockairways.model.Flight;
 import it.bitrock.bitrockairways.model.Route;
 import it.bitrock.bitrockairways.model.TrafficTimeSlot;
+import it.bitrock.bitrockairways.model.dto.CustomerFidelityPointDTO;
 import it.bitrock.bitrockairways.repository.AirportRepository;
 import it.bitrock.bitrockairways.repository.CustomerRepository;
 import it.bitrock.bitrockairways.repository.FlightRepository;
@@ -132,4 +133,10 @@ public class FlightServiceImpl implements FlightService {
         }
         return futureFlights;
     }
+
+    public List<CustomerFidelityPointDTO> getCustomerTotalPoints(){
+        List<CustomerFidelityPointDTO> list = customerRepository.getCustomerTotalPoints();
+        return list;
+    }
+
 }

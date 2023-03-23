@@ -2,7 +2,9 @@ package it.bitrock.bitrockairways.controller;
 
 import it.bitrock.bitrockairways.model.Customer;
 import it.bitrock.bitrockairways.model.Ticket;
+import it.bitrock.bitrockairways.model.dto.CustomerFidelityPointDTO;
 import it.bitrock.bitrockairways.service.CustomerService;
+import it.bitrock.bitrockairways.service.FlightService;
 import it.bitrock.bitrockairways.service.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,12 @@ public class CustomerController {
 
     private final TicketService ticketService;
 
-    public CustomerController(CustomerService customerService, TicketService ticketService) {
+    private final FlightService flightService;
+
+    public CustomerController(CustomerService customerService, TicketService ticketService, FlightService flightService) {
         this.customerService = customerService;
         this.ticketService = ticketService;
+        this.flightService = flightService;
     }
 
     @GetMapping("/customers")
@@ -43,4 +48,11 @@ public class CustomerController {
         List<Ticket> tickets = ticketService.getTicketsByCustomerBeforeNow(customer);
         return ResponseEntity.ok(tickets);
     }
+
+    @GetMapping("/customers/most-fidelity-customer")
+    public ResponseEntity<List<CustomerFidelityPointDTO>> getCustomerTotalPoints(){
+        List<CustomerFidelityPointDTO> list = flightService.getCustomerTotalPoints();
+        return ResponseEntity.ok(list);
+    }
+
 }
