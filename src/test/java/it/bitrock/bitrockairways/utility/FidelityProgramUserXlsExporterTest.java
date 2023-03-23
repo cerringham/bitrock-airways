@@ -12,7 +12,7 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 public class FidelityProgramUserXlsExporterTest {
-/*
+
     private final String filePath = "/tmp/most-fidelity-customer.xls";
     private final List<CustomerFidelityPointDTO> users = generateFidelityProgramUsersList();
     private final FidelityProgramUserXlsExporter exporter = new FidelityProgramUserXlsExporter(filePath, users);
@@ -29,10 +29,6 @@ public class FidelityProgramUserXlsExporterTest {
         assertTrue(xlsFile.exists());
     }
 
-
-
-
-
     private List<CustomerFidelityPointDTO> generateFidelityProgramUsersList() {
         List<CustomerFidelityPointDTO> users = new ArrayList<>();
 
@@ -41,40 +37,13 @@ public class FidelityProgramUserXlsExporterTest {
         for (int i = 0; i < 10; i++) {
             int totalPoints = rand.nextInt(51) * 100; // Generates a random multiple of 100 in the range between 0 and 5000
 
-            CustomerFidelityPointDTO user = getCustomerFidelityPointDTO("User " + i,
-                            "Surname " + i, "user" + i + "@example.com", totalPoints);
+            CustomerFidelityPointDTO user = new CustomerFidelityPointDTO("User " + i,
+                            "Surname " + i, "user" + i + "@example.com", (long) totalPoints);
             users.add(user);
         }
 
         return users;
     }
 
-
-
-    private CustomerFidelityPointDTO getCustomerFidelityPointDTO(String name, String surname, String email, Integer totalPoints) {
-        return new CustomerFidelityPointDTO() {
-
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @Override
-            public String getSurname() {
-                return surname;
-            }
-
-            @Override
-            public String getEmail() {
-                return email;
-            }
-
-            @Override
-            public Integer getPoints() {
-                return points;
-            }
-        };
-    }
-    */
 
 }
