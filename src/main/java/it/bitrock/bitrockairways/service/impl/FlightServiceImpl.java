@@ -134,9 +134,4 @@ public class FlightServiceImpl implements FlightService {
         return futureFlights;
     }
 
-    public List<CustomerFidelityPointDTO> getCustomerTotalPoints(){
-        List<CustomerFidelityPointDTO> list = customerRepository.getCustomerTotalPoints();
-        return list;
-    }
-
 }

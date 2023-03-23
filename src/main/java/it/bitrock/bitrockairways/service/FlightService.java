@@ -18,6 +18,5 @@ public interface FlightService {
 
     List<Flight> getFutureFlightsByRoute(CustomerFlightSearchDTO dto);
 
-    List<CustomerFidelityPointDTO> getCustomerTotalPoints();
 
 }

@@ -19,12 +19,10 @@ public class CustomerController {
 
     private final TicketService ticketService;
 
-    private final FlightService flightService;
 
-    public CustomerController(CustomerService customerService, TicketService ticketService, FlightService flightService) {
+    public CustomerController(CustomerService customerService, TicketService ticketService) {
         this.customerService = customerService;
         this.ticketService = ticketService;
-        this.flightService = flightService;
     }
 
     @GetMapping("/customers")
@@ -51,7 +49,7 @@ public class CustomerController {
 
     @GetMapping("/customers/most-fidelity-customer")
     public ResponseEntity<List<CustomerFidelityPointDTO>> getCustomerTotalPoints(){
-        List<CustomerFidelityPointDTO> list = flightService.getCustomerTotalPoints();
+        List<CustomerFidelityPointDTO> list = customerService.getCustomerTotalPoints();
         return ResponseEntity.ok(list);
     }
 
